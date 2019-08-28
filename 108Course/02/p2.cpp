@@ -46,7 +46,7 @@ int main() {
              << "B-A: " << (B - A) << endl;
         //is contain?
         cout << "A " << ((A >= B) ? "contains " : "does not contain ") << "B" << endl;
-        cout << "B " << ((B >= B) ? "contains " : "does not contain ") << "A" << endl;
+        cout << "B " << ((B >= A) ? "contains " : "does not contain ") << "A" << endl;
         //is in?
         cout << "\'" << element << "\' is " << ((A.have(element)) ? "" : "not ") << "in A" << endl;
         cout << "\'" << element << "\' is " << ((B.have(element)) ? "" : "not ") << "in B" << endl;
@@ -108,9 +108,9 @@ const TSet TSet::operator=(const TSet& source) {
 }
 
 const bool operator>=(const TSet& A, const TSet& B) {
-    TSet difference(A-B);
+    TSet difference(B - A);
     set<char> deffSet = difference.getSet();
-    return (deffSet.size() != 0);
+    return (deffSet.size() == 0);
 }
 
 const bool TSet::have(const char _element) {
