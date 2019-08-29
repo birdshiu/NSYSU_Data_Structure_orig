@@ -54,9 +54,7 @@ void printMap(int** arr, int size) {
 }
 
 bool canAccess(int** arr, int size, int x, int y) {
-    if (x >= size || x < 0 || y >= size || y < 0 || arr[x][y])
-        return false;
-    return true;
+    return !(x >= size || x < 0 || y >= size || y < 0 || arr[x][y]);
 }
 
 int main() {
