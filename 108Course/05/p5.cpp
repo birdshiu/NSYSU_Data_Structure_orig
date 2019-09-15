@@ -10,9 +10,6 @@ struct Term {
         this->exp = _exp;
         this->next = _next;
     }
-    const bool hasNext() {
-        return this->next != nullptr;
-    }
 };
 
 class Chain {
@@ -23,6 +20,7 @@ class Chain {
     pair<Term*, bool> findExp(int _exp);
     void addNode(int _coef, int _exp);
     void cleanNode();
+    void freeChain();
 
    protected:
     Term* head = nullptr;
@@ -33,11 +31,35 @@ class Poly : public Chain {
     Poly() { Chain(); }
     Poly operator+(const Poly);
     Poly operator*(const Poly);
+    friend ostream& operator<<(ostream&, const Poly&);
 };
 
 int main() {
-    int p, q;
-    while (cin >> p >> q && p && q) {
+    int p, q, cases = 1;
+    while (cin >> p >> q && (p || q)) {
+        Poly A, B, C, D;
+        int coef, exp;
+        while (p--) {
+            cin >> coef >> exp;
+            A.addNode(coef, exp);
+        }
+        while (q--) {
+            cin >> coef >> exp;
+            B.addNode(coef, exp);
+        }
+
+        C = A + B;
+        D = A * B;
+
+        printf("Case%d:\n", cases++);
+        cout << "ADD\n"
+             << C << "MULTIPLY\n"
+             << D << endl;
+
+        A.freeChain();
+        B.freeChain();
+        C.freeChain();
+        D.freeChain();
     }
 
     return 0;
@@ -91,11 +113,22 @@ void Chain::cleanNode() {
     }
 }
 
+void Chain::freeChain() {
+    auto temp = this->head;
+    for (auto i = this->head; i != nullptr; i = temp) {
+        temp = i->next;
+        delete (i);
+    }
+}
+
 Poly Poly::operator+(const Poly source) {
+    Poly* result = new Poly();
+    for (auto i = this->head; i != nullptr; i = i->next)
+        result->addNode(i->coef, i->exp);
     for (auto i = source.head; i != nullptr; i = i->next)
-        this->addNode(i->coef, i->exp);
-    this->cleanNode();
-    return *this;
+        result->addNode(i->coef, i->exp);
+    result->cleanNode();
+    return *result;
 }
 
 Poly Poly::operator*(const Poly source) {
@@ -105,4 +138,10 @@ Poly Poly::operator*(const Poly source) {
             result->addNode(i->coef * j->coef, i->exp * j->exp);
     result->cleanNode();
     return *result;
+}
+
+ostream& operator<<(ostream& output, const Poly& source) {
+    for (auto i = source.head; i != nullptr; i = i->next)
+        output << i->coef << " " << i->exp << endl;
+    return output;
 }
