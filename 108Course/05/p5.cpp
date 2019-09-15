@@ -51,7 +51,7 @@ pair<Term*, bool> Chain::findExp(int _exp) {
     Term *current = this->head, *preverious = this->head;
     while (current && current->exp > _exp) {
         preverious = current;
-        current = current->next
+        current = current->next;
     }
     if (current && current->exp == _exp)
         return make_pair(current, true);
@@ -72,7 +72,7 @@ void Chain::addNode(int _coef, int _exp) {  // need sort first
             newTerm->next = insertPlace.first->next;
             insertPlace.first->next = newTerm;  // the middle of the Chain
         } else {
-            insertPlace->next = newTerm;  // the tail
+            insertPlace.first->next = newTerm;  // the tail
         }
     } else {
         this->head = newTerm;
