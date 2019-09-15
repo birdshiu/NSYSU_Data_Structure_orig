@@ -20,29 +20,72 @@ class Chain {
     Chain() {
         this->head = nullptr;
     }
-    void addNode(int _coef, int _exp) {
-        Term* newTerm = new Term(_coef, _coef, nullptr);
-        if (this->head) {
-            head->next = newTerm;
-        } else {
-            head = newTerm;
-        }
-    }
+    pair<Term*, bool> findExp(int _exp);
+    void addNode(int _coef, int _exp);
+    void cleanNode();
 
-   private:
+   protected:
     Term* head = nullptr;
 };
 
-class Poly {
+class Poly : public Chain {
    public:
     Poly operator+(const Poly);
     Poly operator*(const Poly);
-
-   private:
-    int length;
 };
 
 int main() {
     int p, q;
+    while (cin >> p >> q && p && q) {
+    }
+
     return 0;
+}
+
+pair<Term*, bool> Chain::findExp(int _exp) {
+    /*
+    * the return value will be a pair like (pointer, isExpSame)
+    * the first arg which "pointer's next is the palce you will insert"
+    * the second arg is true if _exp == pointer->exp
+    */
+    Term *current = this->head, *preverious = this->head;
+    while (current && current->exp > _exp) {
+        preverious = current;
+        current = current->next
+    }
+    if (current && current->exp == _exp)
+        return make_pair(current, true);
+    return make_pair(preverious, false);
+}
+
+void Chain::addNode(int _coef, int _exp) {  // need sort first
+    Term* newTerm = new Term(_coef, _exp, nullptr);
+    if (this->head) {                                   // if chain is not empty
+        pair<Term*, bool> insertPlace = findExp(_exp);  // find where can I insert new Term in
+
+        if (insertPlace.second) {
+            insertPlace.first->coef += _coef;  // has the same exp just add the coef
+        } else if (insertPlace.first == this->head) {
+            newTerm->next = this->head;
+            this->head = newTerm;  // is the head of the Chain aka newTerm->exp is greater than the head
+        } else if (insertPlace.first->next) {
+            newTerm->next = insertPlace.first->next;
+            insertPlace.first->next = newTerm;  // the middle of the Chain
+        } else {
+            insertPlace->next = newTerm;  // the tail
+        }
+    } else {
+        this->head = newTerm;
+    }
+}
+
+void Chain::cleanNode() {
+    auto preverious = this->head;
+    for (auto current = this->head; current; current = current->next) {
+        if (current->coef) {    // if the coefficeint is not zero
+            preverious = current;
+        } else {
+            preverious->next = current->next;
+        }
+    }
 }
