@@ -30,6 +30,7 @@ class Chain {
 
 class Poly : public Chain {
    public:
+    Poly() { Chain(); }
     Poly operator+(const Poly);
     Poly operator*(const Poly);
 };
@@ -82,10 +83,26 @@ void Chain::addNode(int _coef, int _exp) {  // need sort first
 void Chain::cleanNode() {
     auto preverious = this->head;
     for (auto current = this->head; current; current = current->next) {
-        if (current->coef) {    // if the coefficeint is not zero
+        if (current->coef) {  // if the coefficeint is not zero
             preverious = current;
         } else {
             preverious->next = current->next;
         }
     }
+}
+
+Poly Poly::operator+(const Poly source) {
+    for (auto i = source.head; i != nullptr; i = i->next)
+        this->addNode(i->coef, i->exp);
+    this->cleanNode();
+    return *this;
+}
+
+Poly Poly::operator*(const Poly source) {
+    Poly* result = new Poly();
+    for (auto i = source.head; i != nullptr; i = i->next)
+        for (auto j = this->head; j != nullptr; j = j->next)
+            result->addNode(i->coef * j->coef, i->exp * j->exp);
+    result->cleanNode();
+    return *result;
 }
