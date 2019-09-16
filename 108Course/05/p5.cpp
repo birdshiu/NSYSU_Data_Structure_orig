@@ -14,9 +14,7 @@ struct Term {
 
 class Chain {
    public:
-    Chain() {
-        this->head = nullptr;
-    }
+    Chain() { this->head = nullptr; }
     pair<Term*, bool> findExp(int _exp);
     void addNode(int _coef, int _exp);
     void cleanNode();
@@ -48,13 +46,11 @@ int main() {
             cin >> coef >> exp;
             A.addNode(coef, exp);
         }
-        //cout << A;
         cin >> q;
         for (int i = 0; i < q; i++) {
             cin >> coef >> exp;
             B.addNode(coef, exp);
         }
-        //cout << B;
         if (p == 0 && q == 0)
             break;
 
@@ -118,7 +114,7 @@ void Chain::cleanNode() {
             preverious->next = current->next;
         }
     }
-    while(this->head && this->head->coef == 0){  // boundary condition
+    while (this->head && this->head->coef == 0) {  // boundary condition
         this->head = this->head->next;
     }
 }
