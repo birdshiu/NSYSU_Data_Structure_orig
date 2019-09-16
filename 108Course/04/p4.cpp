@@ -11,7 +11,7 @@ class Dish {
         this->orientedFrom = _orientedFrom;
     }
     Dish(pair<int, int> _destination, int _orientedFrom) {
-        this->destination = destination;
+        this->destination = _destination;
         this->orientedFrom = _orientedFrom;
     }
     pair<int, int> destination;
@@ -123,10 +123,11 @@ void traversal(int** arr, int size, pair<int, int> current, int steps, Stack& A,
         A.push(Dish(current, 8));
         traversal(arr, size, current, steps, A, 0);
     } else {
-        current = A.top().destination;
+        arr[current.first][current.second] = 0;
         hadView = A.top().orientedFrom;
         A.pop();
-        traversal(arr, size, current, steps, A, hadView);
+        current = A.top().destination;
+        traversal(arr, size, current, --steps, A, hadView);
     }
 }
 

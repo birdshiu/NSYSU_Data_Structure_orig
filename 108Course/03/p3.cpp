@@ -11,7 +11,7 @@ class Dish {
         this->orientedFrom = _orientedFrom;
     }
     Dish(pair<int, int> _destination, int _orientedFrom) {
-        this->destination = destination;
+        this->destination = _destination;
         this->orientedFrom = _orientedFrom;
     }
     pair<int, int> destination;
@@ -70,6 +70,7 @@ int main() {
         while (true) {
             if (steps == i * i) {
                 printMap(arr, i);
+                cout << endl;
                 break;
             }
             if (A.empty()) {
@@ -135,9 +136,11 @@ int main() {
                 arr[current.first][current.second] = ++steps;
                 isBack = false;
             } else {
-                current = A.top().destination;
+                arr[current.first][current.second] = 0;
                 hadView = A.top().orientedFrom;
                 A.pop();
+                current = A.top().destination;
+                steps--;
                 isBack = true;
             }
         }
