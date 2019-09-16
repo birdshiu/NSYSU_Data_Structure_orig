@@ -35,33 +35,37 @@ class Poly : public Chain {
 };
 
 int main() {
-    int p, q, cases = 1;
-    while (cin >> p >> q && (p || q)) {
-        Poly A, B, C, D;
-        int coef, exp;
-        while (p--) {
+    int p, q, cases = 1, coef, exp;
+    Poly A, B, C, D;
+    while (1) {
+        A.freeChain();
+        B.freeChain();
+        C.freeChain();
+        D.freeChain();
+
+        cin >> p;
+        for (int i = 0; i < p; i++) {
             cin >> coef >> exp;
             A.addNode(coef, exp);
         }
-        while (q--) {
+        cout << A;
+        cin >> q;
+        for (int i = 0; i < q; i++) {
             cin >> coef >> exp;
             B.addNode(coef, exp);
         }
+        if (p == 0 && q == 0)
+            break;
 
+        cout << "after cin" << endl;
         C = A + B;
         D = A * B;
 
         printf("Case%d:\n", cases++);
         cout << "ADD\n"
              << C << "MULTIPLY\n"
-             << D << endl;
-
-        A.freeChain();
-        B.freeChain();
-        C.freeChain();
-        D.freeChain();
-    }
-
+             << D;
+        }
     return 0;
 }
 
@@ -143,5 +147,7 @@ Poly Poly::operator*(const Poly source) {
 ostream& operator<<(ostream& output, const Poly& source) {
     for (auto i = source.head; i != nullptr; i = i->next)
         output << i->coef << " " << i->exp << endl;
+    if (source.head == nullptr)
+        output << "0 0" << endl;
     return output;
 }
