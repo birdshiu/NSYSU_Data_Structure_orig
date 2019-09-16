@@ -48,16 +48,16 @@ int main() {
             cin >> coef >> exp;
             A.addNode(coef, exp);
         }
-        cout << A;
+        //cout << A;
         cin >> q;
         for (int i = 0; i < q; i++) {
             cin >> coef >> exp;
             B.addNode(coef, exp);
         }
+        //cout << B;
         if (p == 0 && q == 0)
             break;
 
-        cout << "after cin" << endl;
         C = A + B;
         D = A * B;
 
@@ -65,7 +65,7 @@ int main() {
         cout << "ADD\n"
              << C << "MULTIPLY\n"
              << D;
-        }
+    }
     return 0;
 }
 
@@ -92,9 +92,12 @@ void Chain::addNode(int _coef, int _exp) {  // need sort first
 
         if (insertPlace.second) {
             insertPlace.first->coef += _coef;  // has the same exp just add the coef
-        } else if (insertPlace.first == this->head) {
+        } else if (insertPlace.first == this->head && insertPlace.first->exp < _exp) {
             newTerm->next = this->head;
             this->head = newTerm;  // is the head of the Chain aka newTerm->exp is greater than the head
+        } else if (insertPlace.first == this->head && insertPlace.first->exp > _exp) {
+            newTerm->next = this->head->next;
+            this->head->next = newTerm;
         } else if (insertPlace.first->next) {
             newTerm->next = insertPlace.first->next;
             insertPlace.first->next = newTerm;  // the middle of the Chain
@@ -115,6 +118,9 @@ void Chain::cleanNode() {
             preverious->next = current->next;
         }
     }
+    while(this->head && this->head->coef == 0){  // boundary condition
+        this->head = this->head->next;
+    }
 }
 
 void Chain::freeChain() {
@@ -123,6 +129,7 @@ void Chain::freeChain() {
         temp = i->next;
         delete (i);
     }
+    this->head = nullptr;  //after delete need to reset the head, or it will be dangling pointer
 }
 
 Poly Poly::operator+(const Poly source) {
@@ -139,7 +146,7 @@ Poly Poly::operator*(const Poly source) {
     Poly* result = new Poly();
     for (auto i = source.head; i != nullptr; i = i->next)
         for (auto j = this->head; j != nullptr; j = j->next)
-            result->addNode(i->coef * j->coef, i->exp * j->exp);
+            result->addNode(i->coef * j->coef, i->exp + j->exp);
     result->cleanNode();
     return *result;
 }
