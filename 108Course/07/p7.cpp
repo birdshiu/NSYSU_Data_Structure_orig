@@ -34,6 +34,24 @@ void insertionSort(int* arr, int n) {
     }
 }
 
+void merge(int* arr, int front, int tail, int middle) {
+    int leftSubArray[middle + 1], rightSubArray = [middle + 1];
+    // not sure here
+    memcpy(leftSubArray, arr + front, middle);
+    memcpy(rightSubArray, arr + middle + 1, middle);
+    leftSubArray[middle] = INT32_MAX;
+    rightSubArray[middle] = INT32_MAX;
+}
+
+void mergeSort(int* arr, int front, int tail) {
+    if (front < tail) {
+        int middle = (front + tail) / 2;
+        mergeSort(arr, front, middle);
+        mergeSort(arr, middle + 1, tail);
+        merge(arr, front, end, middle);
+    }
+}
+
 int main() {
     vector<pair<int*, int>> arraySets;
     getRawArray(arraySets);
