@@ -94,7 +94,7 @@ int main() {
     cin >> modeSelection;
     switch (modeSelection) {
         case 1:
-            cout << "insertionSort" << endl;
+            cout << "insertion Sort" << endl;
             for (auto arrayIndex : arraySets) {
                 initialTime = time(0);
                 insertionSort(arrayIndex.first, arrayIndex.second);
@@ -104,12 +104,25 @@ int main() {
             }
             break;
         case 2:
-            cout << "mergeSort" << endl;
+            cout << "merge Sort" << endl;
             for (auto arrayIndex : arraySets) {
                 initialTime = time(0);
                 mergeSort(arrayIndex.first, 0, arrayIndex.second);
                 finalTime = time(0);
                 outputResult(string("mergeSort"), arrayIndex.first, arrayIndex.second, finalTime - initialTime);
+                cout << "The total time is " << finalTime - initialTime << " seconds\n";
+            }
+            break;
+        case 3:
+            //qsort
+            break;
+        case 4:
+            cout << "STL Sort" << endl;
+            for (auto arrayIndex : arraySets) {
+                initialTime = time(0);
+                sort(arrayIndex.first, arrayIndex.first+arrayIndex.second);
+                finalTime = time(0);
+                outputResult(string("STL Sort"), arrayIndex.first, arrayIndex.second, finalTime - initialTime);
                 cout << "The total time is " << finalTime - initialTime << " seconds\n";
             }
             break;
