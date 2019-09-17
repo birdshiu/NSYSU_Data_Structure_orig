@@ -35,12 +35,32 @@ void insertionSort(int* arr, int n) {
 }
 
 void merge(int* arr, int front, int tail, int middle) {
-    int leftSubArray[middle + 1], rightSubArray = [middle + 1];
-    // not sure here
-    memcpy(leftSubArray, arr + front, middle);
-    memcpy(rightSubArray, arr + middle + 1, middle);
-    leftSubArray[middle] = INT32_MAX;
-    rightSubArray[middle] = INT32_MAX;
+    int leftSize = middle - front + 1, rightSize = tail - middle;
+
+    int *leftSubArray = new int[leftSize],
+        *rightSubArray = new int[rightSize];
+    //not sure copy range
+    memcpy(leftSubArray, arr + front, leftSize - 1);
+    memcpy(rightSubArray, arr + middle + 1, rightSize - 1);
+
+    int i = 0, j = 0, k = front;
+    while (i < leftSize && j < rightSize) {
+        if (leftSubArray[i] <= rightSubArray[j])
+            arr[k] = leftSubArray[i++];
+        else
+            arr[k] = rightSubArray[j++];
+        k++;
+    }
+    while (i < leftSize) {  //still have element in leftSubArray
+        arr[k] = leftSubArray[i++];
+        k++;
+    }
+    while (j < leftSize) {
+        arr[k] = rightSubArray[j++];
+        k++;
+    }
+    delete[] leftSubArray;
+    delete[] rightSubArray;
 }
 
 void mergeSort(int* arr, int front, int tail) {
@@ -48,7 +68,7 @@ void mergeSort(int* arr, int front, int tail) {
         int middle = (front + tail) / 2;
         mergeSort(arr, front, middle);
         mergeSort(arr, middle + 1, tail);
-        merge(arr, front, end, middle);
+        merge(arr, front, tail, middle);
     }
 }
 
