@@ -1,6 +1,9 @@
+#include <algorithm>
 #include <cstring>
+#include <ctime>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <utility>
 #include <vector>
 using namespace std;
@@ -19,6 +22,15 @@ void getRawArray(vector<pair<int*, int>>& arraySets) {
         arraySets.push_back(make_pair(arr, n));
     }
     file.close();
+}
+
+void outputResult(string sortingAlgorithm, int* arr, int size, unsigned int deltaTime) {
+    ofstream outputFile(sortingAlgorithm + to_string(size) + ".txt", ofstream::out);
+    outputFile << "The total time is " << deltaTime << " seconds\n";
+    for (auto i = 0; i < size; i++)
+        outputFile
+            << arr[i] << "\n";
+    outputFile.close();
 }
 
 void insertionSort(int* arr, int n) {
@@ -74,7 +86,35 @@ void mergeSort(int* arr, int front, int tail) {
 
 int main() {
     vector<pair<int*, int>> arraySets;
+    int modeSelection = 0;
+    unsigned int initialTime, finalTime;
     getRawArray(arraySets);
     cout << "read file done" << endl;
+
+    cin >> modeSelection;
+    switch (modeSelection) {
+        case 1:
+            cout << "insertionSort" << endl;
+            for (auto arrayIndex : arraySets) {
+                initialTime = time(0);
+                insertionSort(arrayIndex.first, arrayIndex.second);
+                finalTime = time(0);
+                outputResult(string("insertionSort"), arrayIndex.first, arrayIndex.second, finalTime - initialTime);
+                cout << "The total time is " << finalTime - initialTime << " seconds\n";
+            }
+            break;
+        case 2:
+            cout << "mergeSort" << endl;
+            for (auto arrayIndex : arraySets) {
+                initialTime = time(0);
+                mergeSort(arrayIndex.first, 0, arrayIndex.second);
+                finalTime = time(0);
+                outputResult(string("mergeSort"), arrayIndex.first, arrayIndex.second, finalTime - initialTime);
+                cout << "The total time is " << finalTime - initialTime << " seconds\n";
+            }
+            break;
+        default:
+            break;
+    }
     return 0;
 }
