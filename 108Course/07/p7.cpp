@@ -84,6 +84,25 @@ void mergeSort(int* arr, int front, int tail) {
     }
 }
 
+int getIndexAndDivide(int* arr, int front, int tail) {
+    int pivot = arr[tail];
+    int i = front - 1;
+    for (auto j = front; j < tail; j++) {
+        if (arr[j] < pivot)
+            swap(arr[++i], arr[j]);
+    }
+    swap(arr[++i], arr[tail]);
+    return i;
+}
+
+void quickSort(int* arr, int front, int tail) {
+    if (front < tail) {
+        int divideIndex = getIndexAndDivide(arr, front, tail);
+        quickSort(arr, front, divideIndex - 1);
+        quickSort(arr, divideIndex + 1, tail);
+    }
+}
+
 int main() {
     vector<pair<int*, int>> arraySets;
     int modeSelection = 0;
@@ -97,9 +116,9 @@ int main() {
             cout << "insertion Sort" << endl;
             for (auto arrayIndex : arraySets) {
                 deltaTime = clock();
-                insertionSort(arrayIndex.first, arrayIndex.second);
+                insertionSort(arrayIndex.first, arrayIndex.second - 1);
                 deltaTime = clock() - deltaTime;
-                outputResult(string("insertionSort"), arrayIndex.first, arrayIndex.second, ((float)deltaTime) / CLOCKS_PER_SEC);
+                outputResult(string("insertion Sort"), arrayIndex.first, arrayIndex.second, ((float)deltaTime) / CLOCKS_PER_SEC);
                 cout << "The total time is " << ((float)deltaTime) / CLOCKS_PER_SEC << " seconds\n";
             }
             break;
@@ -107,14 +126,21 @@ int main() {
             cout << "merge Sort" << endl;
             for (auto arrayIndex : arraySets) {
                 deltaTime = clock();
-                mergeSort(arrayIndex.first, 0, arrayIndex.second);
+                mergeSort(arrayIndex.first, 0, arrayIndex.second - 1);
                 deltaTime = clock() - deltaTime;
-                outputResult(string("mergeSort"), arrayIndex.first, arrayIndex.second, ((float)deltaTime) / CLOCKS_PER_SEC);
+                outputResult(string("merge Sort"), arrayIndex.first, arrayIndex.second, ((float)deltaTime) / CLOCKS_PER_SEC);
                 cout << "The total time is " << ((float)deltaTime) / CLOCKS_PER_SEC << " seconds\n";
             }
             break;
         case 3:
-            //quick sort
+            cout << "quick Sort" << endl;
+            for (auto arrayIndex : arraySets) {
+                deltaTime = clock();
+                quickSort(arrayIndex.first, 0, arrayIndex.second - 1);
+                deltaTime = clock() - deltaTime;
+                outputResult(string("quick Sort"), arrayIndex.first, arrayIndex.second, ((float)deltaTime) / CLOCKS_PER_SEC);
+                cout << "The total time is " << ((float)deltaTime) / CLOCKS_PER_SEC << " seconds\n";
+            }
             break;
         case 4:
             //quick sort
