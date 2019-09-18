@@ -51,14 +51,9 @@ void merge(int* arr, int front, int tail, int middle) {
 
     int *leftSubArray = new int[leftSize],
         *rightSubArray = new int[rightSize];
-    //not sure copy range
-    //memcpy(leftSubArray, arr + front, leftSize - 1);
-    //memcpy(rightSubArray, arr + middle + 1, rightSize - 1);
-
-    for (int i = 0; i < leftSize; i++)
-        leftSubArray[i] = arr[front + i];
-    for (int i = 0; i < rightSize; i++)
-        rightSubArray[i] = arr[i + middle + 1];
+    
+    memcpy(leftSubArray, arr + front, leftSize * sizeof(int));
+    memcpy(rightSubArray, arr + middle + 1, rightSize * sizeof(int));
 
     int i = 0, j = 0, k = front;
     while (i < leftSize && j < rightSize) {
