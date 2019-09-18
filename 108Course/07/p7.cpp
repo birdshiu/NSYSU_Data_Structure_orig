@@ -51,7 +51,7 @@ void merge(int* arr, int front, int tail, int middle) {
 
     int *leftSubArray = new int[leftSize],
         *rightSubArray = new int[rightSize];
-    
+
     memcpy(leftSubArray, arr + front, leftSize * sizeof(int));
     memcpy(rightSubArray, arr + middle + 1, rightSize * sizeof(int));
 
@@ -99,7 +99,7 @@ int main() {
                 deltaTime = clock();
                 insertionSort(arrayIndex.first, arrayIndex.second);
                 deltaTime = clock() - deltaTime;
-                outputResult(string("insertionSort"), arrayIndex.first, arrayIndex.second, ((float) deltaTime)/CLOCKS_PER_SEC);
+                outputResult(string("insertionSort"), arrayIndex.first, arrayIndex.second, ((float)deltaTime) / CLOCKS_PER_SEC);
                 cout << "The total time is " << ((float)deltaTime) / CLOCKS_PER_SEC << " seconds\n";
             }
             break;
