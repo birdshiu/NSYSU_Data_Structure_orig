@@ -52,8 +52,13 @@ void merge(int* arr, int front, int tail, int middle) {
     int *leftSubArray = new int[leftSize],
         *rightSubArray = new int[rightSize];
     //not sure copy range
-    memcpy(leftSubArray, arr + front, leftSize - 1);
-    memcpy(rightSubArray, arr + middle + 1, rightSize - 1);
+    //memcpy(leftSubArray, arr + front, leftSize - 1);
+    //memcpy(rightSubArray, arr + middle + 1, rightSize - 1);
+
+    for (int i = 0; i < leftSize; i++)
+        leftSubArray[i] = arr[front + i];
+    for (int i = 0; i < rightSize; i++)
+        rightSubArray[i] = arr[i + middle + 1];
 
     int i = 0, j = 0, k = front;
     while (i < leftSize && j < rightSize) {
@@ -67,7 +72,7 @@ void merge(int* arr, int front, int tail, int middle) {
         arr[k] = leftSubArray[i++];
         k++;
     }
-    while (j < leftSize) {
+    while (j < rightSize) {
         arr[k] = rightSubArray[j++];
         k++;
     }
@@ -114,13 +119,16 @@ int main() {
             }
             break;
         case 3:
-            //qsort
+            //quick sort
             break;
         case 4:
+            //quick sort
+            break;
+        case 5:
             cout << "STL Sort" << endl;
             for (auto arrayIndex : arraySets) {
                 initialTime = time(0);
-                sort(arrayIndex.first, arrayIndex.first+arrayIndex.second);
+                sort(arrayIndex.first, arrayIndex.first + arrayIndex.second);
                 finalTime = time(0);
                 outputResult(string("STL Sort"), arrayIndex.first, arrayIndex.second, finalTime - initialTime);
                 cout << "The total time is " << finalTime - initialTime << " seconds\n";
