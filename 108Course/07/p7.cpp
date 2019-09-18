@@ -24,7 +24,7 @@ void getRawArray(vector<pair<int*, int>>& arraySets) {
     file.close();
 }
 
-void outputResult(string sortingAlgorithm, int* arr, int size, unsigned int deltaTime) {
+void outputResult(string sortingAlgorithm, int* arr, int size, float deltaTime) {
     ofstream outputFile(sortingAlgorithm + to_string(size) + ".txt", ofstream::out);
     outputFile << "The total time is " << deltaTime << " seconds\n";
     for (auto i = 0; i < size; i++)
@@ -87,7 +87,7 @@ void mergeSort(int* arr, int front, int tail) {
 int main() {
     vector<pair<int*, int>> arraySets;
     int modeSelection = 0;
-    unsigned int initialTime, finalTime;
+    clock_t deltaTime;
     getRawArray(arraySets);
     cout << "read file done" << endl;
 
@@ -96,21 +96,21 @@ int main() {
         case 1:
             cout << "insertion Sort" << endl;
             for (auto arrayIndex : arraySets) {
-                initialTime = time(0);
+                deltaTime = clock();
                 insertionSort(arrayIndex.first, arrayIndex.second);
-                finalTime = time(0);
-                outputResult(string("insertionSort"), arrayIndex.first, arrayIndex.second, finalTime - initialTime);
-                cout << "The total time is " << finalTime - initialTime << " seconds\n";
+                deltaTime = clock() - deltaTime;
+                outputResult(string("insertionSort"), arrayIndex.first, arrayIndex.second, ((float) deltaTime)/CLOCKS_PER_SEC);
+                cout << "The total time is " << ((float)deltaTime) / CLOCKS_PER_SEC << " seconds\n";
             }
             break;
         case 2:
             cout << "merge Sort" << endl;
             for (auto arrayIndex : arraySets) {
-                initialTime = time(0);
+                deltaTime = clock();
                 mergeSort(arrayIndex.first, 0, arrayIndex.second);
-                finalTime = time(0);
-                outputResult(string("mergeSort"), arrayIndex.first, arrayIndex.second, finalTime - initialTime);
-                cout << "The total time is " << finalTime - initialTime << " seconds\n";
+                deltaTime = clock() - deltaTime;
+                outputResult(string("mergeSort"), arrayIndex.first, arrayIndex.second, ((float)deltaTime) / CLOCKS_PER_SEC);
+                cout << "The total time is " << ((float)deltaTime) / CLOCKS_PER_SEC << " seconds\n";
             }
             break;
         case 3:
@@ -122,11 +122,11 @@ int main() {
         case 5:
             cout << "STL Sort" << endl;
             for (auto arrayIndex : arraySets) {
-                initialTime = time(0);
+                deltaTime = clock();
                 sort(arrayIndex.first, arrayIndex.first + arrayIndex.second);
-                finalTime = time(0);
-                outputResult(string("STL Sort"), arrayIndex.first, arrayIndex.second, finalTime - initialTime);
-                cout << "The total time is " << finalTime - initialTime << " seconds\n";
+                deltaTime = clock() - deltaTime;
+                outputResult(string("STL Sort"), arrayIndex.first, arrayIndex.second, ((float)deltaTime) / CLOCKS_PER_SEC);
+                cout << "The total time is " << ((float)deltaTime) / CLOCKS_PER_SEC << " seconds\n";
             }
             break;
         default:
