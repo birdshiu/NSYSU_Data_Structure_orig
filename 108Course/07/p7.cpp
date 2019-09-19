@@ -6,6 +6,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <cstdlib>
 using namespace std;
 
 int* generateArray(int size) {
@@ -103,6 +104,10 @@ void quickSort(int* arr, int front, int tail) {
     }
 }
 
+int compareOfqSsort(const void* a, const void* b) {
+    return (*(int*)a - *(int*)b);
+}
+
 int main() {
     vector<pair<int*, int>> arraySets;
     int modeSelection = 0;
@@ -143,7 +148,14 @@ int main() {
             }
             break;
         case 4:
-            //quick sort
+            cout << "stdlib  qSort" << endl;
+            for (auto arrayIndex : arraySets) {
+                deltaTime = clock();
+                qsort(arrayIndex.first, arrayIndex.second, sizeof(int), compareOfqSsort);
+                deltaTime = clock() - deltaTime;
+                outputResult(string("stdlib  qSort"), arrayIndex.first, arrayIndex.second, ((float)deltaTime) / CLOCKS_PER_SEC);
+                cout << "The total time is " << ((float)deltaTime) / CLOCKS_PER_SEC << " seconds\n";
+            }
             break;
         case 5:
             cout << "STL Sort" << endl;
