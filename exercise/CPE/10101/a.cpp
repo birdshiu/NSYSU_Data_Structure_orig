@@ -24,7 +24,7 @@ int main() {
         if (shata != 0)
             cout << shata << " shata ";
         input %= 100;
-        cout << input << endl;
+        cout << input << endl;  //this will not ac
     }
     return 0;
 }
