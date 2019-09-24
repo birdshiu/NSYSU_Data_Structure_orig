@@ -2,12 +2,12 @@
 using namespace std;
 
 int main() {
-    int num, cases = 1;
+    int num, cases = 0;
     while (cin >> num && num > 0) {
         int answer = 0;
-        for (; num; num = num >> 1)
+        for (; num; num >>= 1)
             answer++;
-        printf("Case %d: %d\n", cases++, answer);
+        printf("Case %d: %d\n", ++cases, answer);
     }
     return 0;
 }
