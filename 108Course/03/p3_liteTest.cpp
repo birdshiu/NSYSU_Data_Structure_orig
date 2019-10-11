@@ -68,7 +68,6 @@ int main() {
         int** arr = makeMap(i);
         pair<int, int> current{0, 0};
         int steps = 1, hadView;
-        bool isBack = false;
 
         A.push(Dish(current, 0));
         arr[0][0] = steps;
@@ -83,16 +82,13 @@ int main() {
                 break;
             }
 
-            if (!isBack)
-                hadView = 0;
-                
-            int j = 1;
-            for (j = 1; j < 9; j++) {
-                if (canAccess(arr, i, current.first + walk.x[j], current.second + walk.y[j]) && hadView < j) {
+            int j;
+            for (j = hadView + 1; j < 9; j++) {
+                if (canAccess(arr, i, current.first + walk.x[j], current.second + walk.y[j])) {
                     current = make_pair(current.first + walk.x[j], current.second + walk.y[j]);
                     A.push(Dish(current, j));
                     arr[current.first][current.second] = ++steps;
-                    isBack = false;
+                    hadView = 0;
                     break;
                 }
             }
@@ -102,7 +98,6 @@ int main() {
                 A.pop();
                 current = A.top().destination;
                 steps--;
-                isBack = true;
             }
         }
         deleteMap(arr, i);
