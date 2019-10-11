@@ -38,10 +38,8 @@ class Stack {
 
 int** makeMap(int n) {
     int** arr = new int*[n];
-    for (int i = 0; i < n; i++) {
-        arr[i] = new int[n];
-        memset(arr[i], 0, sizeof(int) * n);
-    }
+    for (int i = 0; i < n; i++)
+        arr[i] = new int[n]();
     return arr;
 }
 
@@ -63,7 +61,7 @@ bool canAccess(int** arr, int size, int x, int y) {
 }
 
 int main() {
-    for (int i = 1; i <= 9; i++) {
+    for (int i = 1; i <= 8; i++) {
         Stack A;
         int** arr = makeMap(i);
         pair<int, int> current{0, 0};
