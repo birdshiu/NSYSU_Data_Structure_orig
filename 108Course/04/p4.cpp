@@ -132,7 +132,7 @@ void traversal(int** arr, int size, pair<int, int> current, int steps, Stack& A,
 }
 
 int main() {
-    for (int i = 1; i <= 5; i++) {
+    for (int i = 1; i <= 6; i++) {
         Stack A;
         int** arr = makeMap(i);
         pair<int, int> current{0, 0};

@@ -63,7 +63,7 @@ bool canAccess(int** arr, int size, int x, int y) {
 }
 
 int main() {
-    for (int i = 1; i <= 5; i++) {
+    for (int i = 1; i <= 6; i++) {
         Stack A;
         int** arr = makeMap(i);
         pair<int, int> current{0, 0};
