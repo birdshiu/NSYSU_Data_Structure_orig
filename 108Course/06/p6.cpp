@@ -11,13 +11,7 @@ class TreeNode {
         this->value = _value;
         this->right = this->left = nullptr;
     }
-    TreeNode(int _value, TreeNode* _left, TreeNode* _right) {
-        this->value = value;
-        this->left = _left;
-        this->right = _right;
-    }
     friend class BinaryTree;
-    friend void inorderRecording(vector<pair<int, pair<int, int>>>& recording, const TreeNode*);
     TreeNode* findSucc() {
         TreeNode* current = this->right;
         while (current && current->left)
@@ -32,81 +26,87 @@ class TreeNode {
 
 class BinaryTree {
    public:
-    BinaryTree(int _value) {
-        root = new TreeNode(_value);
+    BinaryTree(int _value) { root = new TreeNode(_value); }
+    void clearTree(TreeNode* current) {
+        if (current) return;
+        clearTree(current->left);
+        clearTree(current->right);
+        delete current;
     }
-    const TreeNode* getRoot() const {
-        return this->root;
-    }
-    TreeNode* find(int _value, TreeNode* current) {  //init current is root
+    ~BinaryTree() { clearTree(root); }
+
+    TreeNode* find(int _value, TreeNode* current) {
         if (current == nullptr)
             return nullptr;
         else if (_value == current->value)
             return current;
-        else if (_value > current->value) {
-            preverious = current;
+        else if (_value > current->value)
             return find(_value, current->right);
-        } else {
-            preverious = current;
+        else
             return find(_value, current->left);
-        }
     }
-    void deleteNode(TreeNode* _node) {
-        if (_node == nullptr)
-            cout << "you deleted a null node" << endl;
-        else {
-            if (_node->left == _node->right && _node->right == nullptr)
-                delete _node;
-            else if ((_node->left == nullptr && _node->right) ||
-                     (_node->right == nullptr && _node->left)) {
-                if (_node->value > preverious->value)
-                    preverious->right = ((_node->left) ? _node->left : _node->right);  //must use find() first
-                else
-                    preverious->left = ((_node->left) ? _node->left : _node->right);
-            } else {
+
+    TreeNode* deleteNode(TreeNode* current, TreeNode* _node) {
+        if (current) {
+            if (_node->value > current->value)
+                current->right = deleteNode(current->right, _node);
+            else if (_node->value < current->value)
+                current->left = deleteNode(current->left, _node);
+            else {
+                if (current->left == nullptr)
+                    return current->right;
+                else if (current->right == nullptr)
+                    return current->left;
+
                 TreeNode* successor = _node->findSucc();
-                _node->value = successor->value;
-                deleteNode(successor);
+                current->value = successor->value;
+                delete successor;
+                current->right = deleteNode(current->right, _node);
             }
-        }
+            return current;
+        } else
+            return nullptr;
     }
+
+    TreeNode* insertNode(TreeNode* current, int _value) {
+        if (current == nullptr)
+            return new TreeNode(_value);
+        else if (_value < current->value)
+            current->left = insertNode(current->left, _value);
+        else
+            current->right = insertNode(current->right, _value);
+        return current;
+    }
+
     void addNode(int _value) {
-        preverious = root;
         TreeNode* isInTree = find(_value, root);
-        if (isInTree)
-            deleteNode(isInTree);
-        else {
-            TreeNode* newNode = new TreeNode(_value);
-            if (newNode->value > preverious->value)
-                preverious->right = newNode;
-            else
-                preverious->left = newNode;
+        root = ((isInTree) ? deleteNode(root, isInTree) : insertNode(root, _value));
+    }
+
+    void inorderRecording(vector<pair<int, pair<int, int>>>& recording) { inorderRecording(recording, root); }
+    void inorderRecording(vector<pair<int, pair<int, int>>>& recording, const TreeNode* current) {
+        if (current) {
+            inorderRecording(recording, current->left);
+            int left, right;
+            left = ((current->left) ? current->left->value : 0);
+            right = ((current->right) ? current->right->value : 0);
+            recording.push_back(make_pair(current->value, make_pair(left, right)));
+            inorderRecording(recording, current->right);
         }
     }
 
    private:
-    TreeNode *root, *preverious = nullptr;
+    TreeNode* root;
 };
-
-void inorderRecording(vector<pair<int, pair<int, int>>>& recording, const TreeNode* current) {
-    if (current) {
-        inorderRecording(recording, current->left);
-        int left, right;
-        left = ((current->left) ? current->left->value : 0);
-        right = ((current->right) ? current->right->value : 0);
-        recording.push_back(make_pair(current->value, make_pair(left, right)));
-        inorderRecording(recording, current->right);
-    }
-}
 
 int main() {
     int n;
-    cin >> n;
-    BinaryTree* tree = new BinaryTree(n);
-    vector<pair<int, pair<int, int>>> recording;
-    while (cin >> n && n != -1) {
-        tree->addNode(n);
-        inorderRecording(recording, tree->getRoot());
+    while (cin >> n) {
+        BinaryTree* tree = new BinaryTree(n);
+        vector<pair<int, pair<int, int>>> recording;
+        while (cin >> n && n != -1)
+            tree->addNode(n);
+        tree->inorderRecording(recording);
         cout << "node: ";
         for (auto i : recording)
             cout << i.first << " ";
@@ -118,5 +118,6 @@ int main() {
             cout << i.second.second << " ";
         cout << "\n\n";
         recording.clear();
+        tree->~BinaryTree();
     }
 }
