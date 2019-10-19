@@ -1,13 +1,34 @@
 import tkinter as tk
+import tkinter.messagebox
+import tkinter.ttk
 from tkinter.filedialog import *
+from functools import partial
+from huffmanCoding import *
+
+
+def allDone():
+    tkinter.messagebox.showinfo(title='Done!', message='done and exit')
+    # remember to close file
+    sys.exit(0)
 
 # do decode
-def doDecode(): 
-    print('start decode')
+
+
+def doDecode(fileName):
+    print('start decode' + fileName)
+    h = HuffmanCoding(fileName)
+    h.decompress(fileName)
+    allDone()
+
 
 # do encode
-def doEncode(): 
-    print('start encode')
+
+def doEncode(fileName):
+    print('start encode' + fileName)
+    h = HuffmanCoding(fileName)
+    h.compress()
+    allDone()
+
 
 window = tk.Tk()
 window.title('Hello world for Huffman_coding')
@@ -28,11 +49,10 @@ while(True):
 
 
 doDecodeButton = tk.Button(window, text='decode',
-                           width=10, height=2, command=doDecode)
+                           width=10, height=2, command=partial(doDecode, fileName)).pack()
 doEncodeButton = tk.Button(window, text='encode',
-                           width=10, height=2, command=doEncode)
-doDecodeButton.pack()
-doEncodeButton.pack()
+                           width=10, height=2, command=partial(doEncode, fileName)).pack()
+
 
 # loop while you ckick
 window.mainloop()
