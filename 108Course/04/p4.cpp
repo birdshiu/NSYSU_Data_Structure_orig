@@ -27,9 +27,9 @@ void printMap(int** arr, int size) {
 }
 
 bool canAccess(int** arr, int size, pair<int, int> coordinate) {
-    return (coordinate.first < size && coordinate.first >= 0 &&
-             coordinate.second >= size && coordinate.second >= 0 &&
-             !arr[coordinate.first][coordinate.second]);
+    return !(coordinate.first >= size || coordinate.first < 0 ||
+             coordinate.second >= size || coordinate.second < 0 ||
+             arr[coordinate.first][coordinate.second]);
 }
 
 bool traversal(int** arr, int size, pair<int, int> current, int steps) {
