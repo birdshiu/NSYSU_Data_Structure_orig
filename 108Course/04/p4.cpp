@@ -27,9 +27,9 @@ void printMap(int** arr, int size) {
 }
 
 bool canAccess(int** arr, int size, pair<int, int> coordinate) {
-    return !(coordinate.first >= size || coordinate.first < 0 ||
-             coordinate.second >= size || coordinate.second < 0 ||
-             arr[coordinate.first][coordinate.second]);
+    return (coordinate.first < size && coordinate.first >= 0 &&
+             coordinate.second >= size && coordinate.second >= 0 &&
+             !arr[coordinate.first][coordinate.second]);
 }
 
 bool traversal(int** arr, int size, pair<int, int> current, int steps) {
@@ -52,7 +52,7 @@ bool traversal(int** arr, int size, pair<int, int> current, int steps) {
 }
 
 int main() {
-    for (auto i : {1, 2, 3, 4, 5, 6, 7, 8, 9}) {
+    for (auto i : {1, 2, 3, 4, 5, 6, 7, 8}) {   // the 9 is impossible, because the complacity is O(8^(n^2)).
         auto arr = makeMap(i);
         auto current = make_pair(0, 0);
 
