@@ -84,25 +84,24 @@ pair<Term*, bool> Chain::findExp(int _exp) {
 void Chain::addNode(int _coef, int _exp) {  // need sort first
     Term* newTerm = new Term(_coef, _exp, nullptr);
     if (this->head) {                                   // if chain is not empty
-        pair<Term*, bool> insertPlace = findExp(_exp);  // find where can I insert new Term in
+        auto [insertPlace, isExist] = findExp(_exp);  // find where can I insert new Term in
 
-        if (insertPlace.second) {
-            insertPlace.first->coef += _coef;  // has the same exp just add the coef
-        } else if (insertPlace.first == this->head && insertPlace.first->exp < _exp) {
+        if (isExist) {
+            insertPlace->coef += _coef;  // has the same exp just add the coef
+        } else if (insertPlace == this->head && insertPlace->exp < _exp) {
             newTerm->next = this->head;
             this->head = newTerm;  // is the head of the Chain aka newTerm->exp is greater than the head
-        } else if (insertPlace.first == this->head && insertPlace.first->exp > _exp) {
+        } else if (insertPlace == this->head && insertPlace->exp > _exp) {
             newTerm->next = this->head->next;
             this->head->next = newTerm;
-        } else if (insertPlace.first->next) {
-            newTerm->next = insertPlace.first->next;
-            insertPlace.first->next = newTerm;  // the middle of the Chain
+        } else if (insertPlace->next) {
+            newTerm->next = insertPlace->next;
+            insertPlace->next = newTerm;  // the middle of the Chain
         } else {
-            insertPlace.first->next = newTerm;  // the tail
+            insertPlace->next = newTerm;  // the tail
         }
-    } else {
+    } else
         this->head = newTerm;
-    }
 }
 
 void Chain::cleanNode() {
