@@ -5,11 +5,7 @@ using namespace std;
 struct Term {
     int coef, exp;
     Term* next;
-    Term(const int _coef, const int _exp, Term* _next) {
-        this->coef = _coef;
-        this->exp = _exp;
-        this->next = _next;
-    }
+    Term(const int _coef, const int _exp, Term* _next) : coef(_coef), exp(_exp), next(_next) {}
 };
 
 class Chain {
@@ -71,35 +67,31 @@ pair<Term*, bool> Chain::findExp(int _exp) {
     * the first arg which "pointer's next is the palce you will insert"
     * the second arg is true if _exp == pointer->exp
     */
-    Term *current = this->head, *preverious = this->head;
-    while (current && current->exp > _exp) {
+    Term *current = this->head, *preverious = nullptr;
+    for (; current && current->exp >= _exp; current = current->next)
         preverious = current;
-        current = current->next;
-    }
-    if (current && current->exp == _exp)
-        return make_pair(current, true);
-    return make_pair(preverious, false);
+    return make_pair(preverious, preverious && preverious->exp == _exp);
 }
 
 void Chain::addNode(int _coef, int _exp) {  // need sort first
     Term* newTerm = new Term(_coef, _exp, nullptr);
-    if (this->head) {                                   // if chain is not empty
+    if (this->head) {                                 // if chain is not empty
         auto [insertPlace, isExist] = findExp(_exp);  // find where can I insert new Term in
 
         if (isExist) {
             insertPlace->coef += _coef;  // has the same exp just add the coef
-        } else if (insertPlace == this->head && insertPlace->exp < _exp) {
+            delete newTerm;
+        } else if (insertPlace == nullptr) {
             newTerm->next = this->head;
-            this->head = newTerm;  // is the head of the Chain aka newTerm->exp is greater than the head
-        } else if (insertPlace == this->head && insertPlace->exp > _exp) {
+            this->head = newTerm;  // _exp greater than head
+        } else if (insertPlace == this->head) {
             newTerm->next = this->head->next;
             this->head->next = newTerm;
         } else if (insertPlace->next) {
             newTerm->next = insertPlace->next;
             insertPlace->next = newTerm;  // the middle of the Chain
-        } else {
+        } else
             insertPlace->next = newTerm;  // the tail
-        }
     } else
         this->head = newTerm;
 }
@@ -107,15 +99,13 @@ void Chain::addNode(int _coef, int _exp) {  // need sort first
 void Chain::cleanNode() {
     auto preverious = this->head;
     for (auto current = this->head; current; current = current->next) {
-        if (current->coef) {  // if the coefficeint is not zero
+        if (current->coef)  // if the coefficeint is not zero
             preverious = current;
-        } else {
+        else
             preverious->next = current->next;
-        }
     }
-    while (this->head && this->head->coef == 0) {  // boundary condition
+    while (this->head && this->head->coef == 0)  // boundary condition
         this->head = this->head->next;
-    }
 }
 
 void Chain::freeChain() {
