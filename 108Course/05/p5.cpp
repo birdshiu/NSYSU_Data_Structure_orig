@@ -5,7 +5,7 @@ using namespace std;
 struct Term {
     int coef, exp;
     Term* next;
-    Term(const int _coef, const int _exp, Term* _next) : coef(_coef), exp(_exp), next(_next) {}
+    Term(const int _coef, const int _exp, Term* _next = nullptr) : coef(_coef), exp(_exp), next(_next) {}
 };
 
 class Chain {
@@ -62,11 +62,6 @@ int main() {
 }
 
 pair<Term*, bool> Chain::findExp(int _exp) {
-    /*
-    * the return value will be a pair like (pointer, isExpSame)
-    * the first arg which "pointer's next is the palce you will insert"
-    * the second arg is true if _exp == pointer->exp
-    */
     Term *current = this->head, *preverious = nullptr;
     for (; current && current->exp >= _exp; current = current->next)
         preverious = current;
@@ -74,7 +69,7 @@ pair<Term*, bool> Chain::findExp(int _exp) {
 }
 
 void Chain::addNode(int _coef, int _exp) {  // need sort first
-    Term* newTerm = new Term(_coef, _exp, nullptr);
+    auto newTerm = new Term(_coef, _exp);
     if (this->head) {                                 // if chain is not empty
         auto [insertPlace, isExist] = findExp(_exp);  // find where can I insert new Term in
 
@@ -97,15 +92,16 @@ void Chain::addNode(int _coef, int _exp) {  // need sort first
 }
 
 void Chain::cleanNode() {
-    auto preverious = this->head;
-    for (auto current = this->head; current; current = current->next) {
-        if (current->coef)  // if the coefficeint is not zero
-            preverious = current;
-        else
-            preverious->next = current->next;
+    auto current = this->head, preverious = this->head;
+    while (current) {
+        auto theNext = current->next;
+        preverious = ((current->coef) ? current : preverious);
+        if (!current->coef) {
+            ((current == this->head) ? this->head : preverious->next) = current->next;
+            delete current;
+        }
+        current = theNext;
     }
-    while (this->head && this->head->coef == 0)  // boundary condition
-        this->head = this->head->next;
 }
 
 void Chain::freeChain() {
