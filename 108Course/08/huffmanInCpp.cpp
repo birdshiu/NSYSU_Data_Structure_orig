@@ -8,12 +8,15 @@ using namespace std;
 class HuffmanNode {
    public:
     HuffmanNode() {
-        memset(this, 0, sizeof(HuffmanNode));
+        byteByAscii = frequency = codingLength = 0;
+        decompressCode = 0;
+        parent = left = right = nullptr;
+
     }
     int frequency, codingLength;
     char byteByAscii;
     long decompressCode;
-    HuffmanNode *parent, *left, &right;
+    HuffmanNode *parent, *left, *right;
 };
 
 HuffmanNode* pop(HuffmanNode* allNodes[], int index, bool isRightSide = false) {
@@ -68,10 +71,8 @@ int generateTree(HuffmanNode fullTree[], bool setCoding) {
     return counter;
 }
 
-void compress(){
-
+void compress() {
 }
 
-void decompress(){
-    
+void decompress() {
 }
