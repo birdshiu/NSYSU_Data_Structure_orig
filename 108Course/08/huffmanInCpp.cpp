@@ -11,7 +11,6 @@ class HuffmanNode {
         byteByAscii = frequency = codingLength = 0;
         decompressCode = 0;
         parent = left = right = nullptr;
-
     }
     int frequency, codingLength;
     char byteByAscii;
@@ -71,8 +70,17 @@ int generateTree(HuffmanNode fullTree[], bool setCoding) {
     return counter;
 }
 
-void compress() {
+void compress(string fileName) {
+    auto fullNodes(new HuffmanNode[511]);
+    for (int i = 0; i < 511; i++)
+        fullNodes[i].byteByAscii = i;
+    ifstream inputFile(fileName.c_str(), ios::in|ios::binary));
+
+    vector<char> data(istreambuf_iterator<char>(inputFile), istreambuf_iterator<char>());
+    inputFile.close();
+    for (auto i : data)
+        fullNodes[i].frequency++;
 }
 
-void decompress() {
+void decompress(string fileName) {
 }
