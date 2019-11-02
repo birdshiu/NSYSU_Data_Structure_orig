@@ -35,3 +35,13 @@ int main() {
     
     return 0;
 }
+
+/*
+About time complexity:
+because max and min is calling vector.size()
+and the vector.size() complexity is constant[1]
+therefore this program total complexity is max(n, m) for n, m are the size of vector.
+
+ref.
+[1] https://en.cppreference.com/w/cpp/container/vector/size
+*/
