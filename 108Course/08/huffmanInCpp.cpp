@@ -1,85 +1,92 @@
+#include "huffmanInCpp.hpp"
 #include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <map>
+#include <queue>
 #include <vector>
+#define uChar unsigned char
 using namespace std;
 
-class HuffmanNode {
-   public:
-    HuffmanNode() {
-        byteByAscii = frequency = codingLength = 0;
-        decompressCode = 0;
-        parent = left = right = nullptr;
+struct cmp {
+    bool operator()(const HuffmanNode& lhs, const HuffmanNode& rhs) {
+        if (lhs.frequency != rhs.frequency)
+            return lhs.frequency < rhs.frequency;
+        return lhs.codingLength > rhs.codingLength;
     }
-    int frequency, codingLength;
-    char byteByAscii;
-    long decompressCode;
-    HuffmanNode *parent, *left, *right;
 };
 
-HuffmanNode* pop(HuffmanNode* allNodes[], int index, bool isRightSide = false) {
-    auto current = allNodes[index];
-    current->decompressCode = isRightSide;
-    current->codingLength = 1;
-    return current;
+HuffmanNode::HuffmanNode(uChar _singleByte = 0, int _frequency = 0) {
+    byteByAscii = _singleByte;
+    frequency = _frequency;
+    codingLength = 0;
+    decompressCode = 0;
+    parent = left = right = nullptr;
 }
 
-void settingNodeCode(HuffmanNode* current) {
-    auto thisParent = current->parent;
-    while (thisParent && thisParent->codingLength) {
-        current->decompressCode <<= 1;
-        current->decompressCode |= thisParent->decompressCode;
-        current->codingLength++;
-        thisParent = thisParent->parent;
-    }
+HuffmanNode::HuffmanNode(HuffmanNode* leftNode, HuffmanNode* rightNode) {
+    frequency = leftNode->frequency + rightNode->frequency;
+    leftNode->parent = rightNode->parent = this;
+    left = leftNode;
+    right = rightNode;
+    parent = nullptr;
+    //maybe not done
 }
 
-int generateTree(HuffmanNode fullTree[], bool setCoding) {
-    HuffmanNode *allNodes[256], *current = nullptr;
-    int counter = 0;
-    for (int i = 0; i < 256 && fullTree[i].frequency; i++)
-        allNodes[counter++] = &fullTree[i];
-    int parentNode = counter, stillInQueue = counter - 1;
+int readOriginFileToVector(string fileName, vector<uChar>& rawData) {
+    // will be return the file size by byte
+    ifstream inFile(fileName, ios::in | ios::binary);
+    if (inFile.fail())
+        throw "Read File Error";
+    if (inFile.good())
+        rawData = vector<uChar> v(istreambuf_iterator<uChar>{inFile}, {});
+    int fullSize = inFile.tellg();
+    inFile.close();
+    return fullSize;
+}
 
-    while (stillInQueue > 0) {
-        current = &fullTree[parentNode++];
-        current->left = pop(allNodes, stillInQueue--);
-        current->right = pop(allNodes, stillInQueue--, true);
-        current->left->parent = current->right->parent = current;
-        current->frequency = current->left->frequency + current->right->frequency;
-
-        int i = stillInQueue;
-        for (; i >= 0; i--) {
-            if (allNodes[i]->frequency >= current->frequency) {
-                for (; i >= 0; i--)
-                    if (allNodes[i]->frequency == current->frequency && allNodes[i]->byteByAscii < current->byteByAscii)
-                        allNodes[i + 1] = allNodes[i];
-                    else
-                        break;
-                break;
-            }
-            allNodes[i + 1] = allNodes[i];
-        }
-        allNodes[i + 1] = current;
-        stillInQueue++;
+HuffmanNode* mergeHuffmanTree(map<uChar, int>& nodeTable) {
+    priority_queue<HuffmanNode, vector<HuffmanNode>, cmp> pq;
+    for (auto i : nodeTable) {
+        auto newNode = new HuffmanNode(i.first, i.second);
+        pq.push(newNode);
     }
-    if (setCoding)
-        for (int i = 0; i < counter; i++)
-            settingNodeCode(&fullTree[i]);
-    return counter;
+    while (pq.size() > 1) {
+        auto a = pq.top();
+        pq.pop();
+        auto b = pq.top();
+        b.pop();
+
+        auto mergedNode = new HuffmanNode(&a, &b);
+        pq.push(mergedNode);
+    }
+    return &(pq.top());
+}
+
+void writeCompressResult(int originSize) {
 }
 
 void compress(string fileName) {
-    auto fullNodes(new HuffmanNode[511]);
-    for (int i = 0; i < 511; i++)
-        fullNodes[i].byteByAscii = i;
-    ifstream inputFile(fileName.c_str(), ios::in|ios::binary));
+    vector<uChar> rawData;
+    int inputSize;
+    HuffmanNode* root;
 
-    vector<char> data(istreambuf_iterator<char>(inputFile), istreambuf_iterator<char>());
-    inputFile.close();
-    for (auto i : data)
-        fullNodes[i].frequency++;
+    //read raw file to vector
+    try {
+        inputSize = readOriginFileToVector(fileName, rawData);
+    } catch (const exception& e) {
+        cerr << e.what() << '\n';
+        exit(1);
+    }
+
+    // collect byte frequency in map
+    map<uChar, int> nodeTable;  //unsigned char, frequency
+    for (auto singleByte : rawData) {
+        nodeTable[singleByte]++;
+    }
+
+    root = mergeHuffmanTree(nodeTable);
 }
 
 void decompress(string fileName) {
