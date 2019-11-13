@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include <string>
 #include "huffmanInCpp.hpp"
 #define uChar unsigned char
 
@@ -17,7 +18,7 @@ class HuffmanNode {
 
     int frequency, codingLength;
     uChar byteByAscii;
-    long decompressCode;
+    string decompressCode;
     HuffmanNode *parent, *left, *right;
 };
 

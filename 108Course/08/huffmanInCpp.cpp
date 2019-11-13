@@ -17,7 +17,7 @@ struct cmp {
     }
 };
 
-HuffmanNode::HuffmanNode(uChar _singleByte = 0, int _frequency = 0) {
+HuffmanNode::HuffmanNode(uChar _singleByte, int _frequency) {
     byteByAscii = _singleByte;
     frequency = _frequency;
     codingLength = 0;
@@ -56,12 +56,21 @@ HuffmanNode* mergeHuffmanTree(map<uChar, int>& nodeTable) {
         auto a = pq.top();
         pq.pop();
         auto b = pq.top();
-        b.pop();
+        pq.pop();
 
         auto mergedNode = new HuffmanNode(&a, &b);
         pq.push(mergedNode);
     }
     return &(pq.top());
+}
+
+void assignCompressCode(HuffmanNode* current, string code = "") {
+    if (current->left == nullptr && current->right == nullptr)  //isLeaf
+        current->decompressCode = code;
+    if (current->left)
+        assignCompressCode(current->left, code.append("0"));
+    if (current->right)
+        assignCompressCode(current->right, code.append("1"));
 }
 
 void writeCompressResult(int originSize) {
@@ -87,6 +96,7 @@ void compress(string fileName) {
     }
 
     root = mergeHuffmanTree(nodeTable);
+    assignCompressCode(root);
 }
 
 void decompress(string fileName) {
