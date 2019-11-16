@@ -46,22 +46,22 @@ class BinaryTree {
             return find(_value, current->left);
     }
 
-    TreeNode* deleteNode(TreeNode* current, TreeNode* _node) {
+    TreeNode* deleteNode(TreeNode* current, TreeNode* toBeDeleted) {
         if (current) {
-            if (_node->value > current->value)
-                current->right = deleteNode(current->right, _node);
-            else if (_node->value < current->value)
-                current->left = deleteNode(current->left, _node);
+            if (toBeDeleted->value > current->value)
+                current->right = deleteNode(current->right, toBeDeleted);
+            else if (toBeDeleted->value < current->value)
+                current->left = deleteNode(current->left, toBeDeleted);
             else {
                 if (current->left == nullptr)
                     return current->right;
                 else if (current->right == nullptr)
                     return current->left;
 
-                TreeNode* successor = _node->findSucc();
+                TreeNode* successor = toBeDeleted->findSucc();
                 current->value = successor->value;
                 delete successor;
-                current->right = deleteNode(current->right, _node);
+                current->right = deleteNode(current->right, toBeDeleted);
             }
             return current;
         } else
