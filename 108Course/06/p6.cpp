@@ -118,6 +118,5 @@ int main() {
             cout << i.second.second << " ";
         cout << "\n\n";
         recording.clear();
-        tree->~BinaryTree();
     }
 }
