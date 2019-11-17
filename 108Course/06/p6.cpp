@@ -28,7 +28,8 @@ class BinaryTree {
    public:
     BinaryTree(int _value) { root = new TreeNode(_value); }
     void clearTree(TreeNode* current) {
-        if (current) return;
+        if (!current)
+            return;
         clearTree(current->left);
         clearTree(current->right);
         delete current;
@@ -118,5 +119,6 @@ int main() {
             cout << i.second.second << " ";
         cout << "\n\n";
         recording.clear();
+        tree->~BinaryTree();
     }
 }
