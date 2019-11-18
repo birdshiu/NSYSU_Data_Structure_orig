@@ -64,8 +64,8 @@ class BinaryTree {
 
                 TreeNode* successor = toBeDeleted->findSucc();
                 current->value = successor->value;
+                current->right = deleteNode(current->right, successor);
                 delete successor;
-                current->right = deleteNode(current->right, toBeDeleted);
             }
             return current;
         } else

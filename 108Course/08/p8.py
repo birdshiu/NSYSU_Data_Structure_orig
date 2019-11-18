@@ -1,9 +1,24 @@
 import tkinter as tk
 import tkinter.messagebox
 import tkinter.ttk
+import platform
 from tkinter.filedialog import *
 from functools import partial
-from huffmanCoding import *
+from ctypes import cdll
+#from huffmanCoding import *
+
+
+"""
+
+if platform.system() == 'Windows':
+    libc = cdll.LoadLibrary('huffman.dll')
+elif platform.system() == 'Linux':
+    libc = cdll.LoadLibrary('huffman.so')
+
+class huffman(object):
+    def __init__(self):
+        self.obj = libc.
+"""
 
 
 def allDone():
