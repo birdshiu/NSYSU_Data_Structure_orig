@@ -1,5 +1,6 @@
 #include "huffmanInCpp.hpp"
 #include <algorithm>
+#include <bitset>
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -65,13 +66,24 @@ HuffmanNode* mergeHuffmanTree(map<uChar, int>& nodeTable) {
     return pq.top();
 }
 
-void assignCompressCode(HuffmanNode* current, string code = "") {
+int getNumberWidth(uChar a) {
+    int counter = 0;
+    while (a) {
+        counter++;
+        a /= 10;
+    }
+    return counter;
+}
+
+void assignCompressCode(HuffmanNode* current, uChar code = 0) {
     if (current->left)
-        assignCompressCode(current->left, code.append("0"));
-    if (current->left == nullptr && current->right == nullptr)  //isLeaf
+        assignCompressCode(current->left, code << 1);
+    if (current->left == nullptr && current->right == nullptr) {
         current->decompressCode = code;
+        current->codingLength = getNumberWidth(code);  // not done
+    }
     if (current->right)
-        assignCompressCode(current->right, code.append("1"));
+        assignCompressCode(current->right, (code << 1) + 1);
 }
 
 void recordingLeafs(HuffmanNode* current, vector<HuffmanNode*>& leafs) {
@@ -82,24 +94,52 @@ void recordingLeafs(HuffmanNode* current, vector<HuffmanNode*>& leafs) {
         recordingLeafs(current->right, leafs);
 }
 
-void writeCompressResult(string inputFileName, int originSize, HuffmanNode* root) {
+void encoding(vector<HuffmanNode*>& leafs, vector<uChar>& rawData) {
+    map<uChar, uChar> encodingTable;
+    for (auto i : leafs)
+        encodingTable[i->byteByAscii] = i->decompressCode;
+    for (auto iter = rawData.begin(); iter != rawData.end(); iter++) {
+        auto getCode = find(encodingTable.begin(), encodingTable.end(), *iter);
+        if (getCode == encodingTable.end())
+            throw "no match on encoding table!";
+        (*iter) = getCode->second;
+    }
+}
+
+void writeCompressResult(string inputFileName, int originSize, HuffmanNode* root, vector<uChar>& rawData) {
+    vector<HuffmanNode*> leafs;
     regex getFileName("[^/]*$");
     string outputName;
+    ofstream outFile(outputName);
+
+    recordingLeafs(root, leafs);
+    try {
+        encoding(leafs, rawData);
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+
+    auto bitsWidth = leafs.back()->codingLength;
+    auto CompressedSize = rawData.size() * bitsWidth / sizeof(uChar);
+
     regex_search(inputFileName, outputName, getFileName);
     outputName.append(".compress");
 
-    ofstream outFile(outputName);
     outFile << "Origin file size(Byte): " << originSize << endl;
-    //outFile << "Comperssed file size(Byte): " << CompressedSize << endl;
-    //outFile << "Compress rate: " << CompressedSize * 1.0 / originSize << endl;
+    outFile << "Comperssed file size(Byte): " << CompressedSize << endl;
+    outFile << "Compress rate: " << CompressedSize * 1.0 / originSize << endl;
 
-    //encoding table
-    vector<HuffmanNode*>leafs;
-    recordingLeafs(root, leafs);
-    for (auto nodes : leafs)
-        outFile << nodes->byteByAscii << "=" << nodes->decompressCode << endl;
+    for (auto nodes : leafs) {
+        bitset<bitsWidth> b(nodes->decompressCode);
+        outFile << nodes->byteByAscii << "=" << b << endl;
+    }
 
-    //compress origin to following result
+    outFile << "----------" << endl;
+    // output compressed Data
+    for(auto i : rawData){
+        bitset<bitsWidth> b(i);  //must be const, hence will use concatenate bits to output
+        outFile << b;
+    }
 
     outFile.close();
 }
@@ -125,7 +165,7 @@ void compress(string fileName) {
 
     root = mergeHuffmanTree(nodeTable);
     assignCompressCode(root);
-    writeCompressResult(fileName, inputSize, root);
+    writeCompressResult(fileName, inputSize, root, rawData);
 }
 
 void decompress(string fileName) {
