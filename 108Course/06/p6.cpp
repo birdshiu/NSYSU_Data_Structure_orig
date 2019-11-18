@@ -1,5 +1,5 @@
 #include <iostream>
-#include <utility>
+#include <tuple>
 #include <vector>
 using namespace std;
 
@@ -12,7 +12,7 @@ class TreeNode {
         this->right = this->left = nullptr;
     }
     friend class BinaryTree;
-    TreeNode* findSucc() {
+    TreeNode* getSuccessor() {
         TreeNode *current = this->right, *preverious = current;
         while (current && current->left) {
             preverious = current;
@@ -62,7 +62,7 @@ class BinaryTree {
                 else if (current->right == nullptr)
                     return current->left;
 
-                TreeNode* successor = toBeDeleted->findSucc();
+                TreeNode* successor = toBeDeleted->getSuccessor();
                 current->value = successor->value;
                 current->right = deleteNode(current->right, successor);
                 delete successor;
@@ -87,15 +87,14 @@ class BinaryTree {
         root = ((isInTree) ? deleteNode(root, isInTree) : insertNode(root, _value));
     }
 
-    void inorderRecording(vector<pair<int, pair<int, int>>>& recording) { inorderRecording(recording, root); }
-    void inorderRecording(vector<pair<int, pair<int, int>>>& recording, const TreeNode* current) {
+    void inorderRecord(vector<tuple<int, int, int>>& recorder) { inorderRecord(recorder, root); }
+    void inorderRecord(vector<tuple<int, int, int>>& recorder, const TreeNode* current) {
         if (current) {
-            inorderRecording(recording, current->left);
-            int left, right;
-            left = ((current->left) ? current->left->value : 0);
-            right = ((current->right) ? current->right->value : 0);
-            recording.push_back(make_pair(current->value, make_pair(left, right)));
-            inorderRecording(recording, current->right);
+            inorderRecord(recorder, current->left);
+            int left = ((current->left) ? current->left->value : 0),
+                right = ((current->right) ? current->right->value : 0);
+            recorder.push_back(make_tuple(current->value, left, right));
+            inorderRecord(recorder, current->right);
         }
     }
 
@@ -107,21 +106,21 @@ int main() {
     int n;
     while (cin >> n) {
         BinaryTree* tree = new BinaryTree(n);
-        vector<pair<int, pair<int, int>>> recording;
+        vector<tuple<int, int, int>> recorder;
         while (cin >> n && n != -1)
             tree->addNode(n);
-        tree->inorderRecording(recording);
+        tree->inorderRecord(recorder);
         cout << "node: ";
-        for (auto i : recording)
-            cout << i.first << " ";
+        for (auto i : recorder)
+            cout << get<0>(i) << " ";
         cout << "\nleft: ";
-        for (auto i : recording)
-            cout << i.second.first << " ";
+        for (auto i : recorder)
+            cout << get<1>(i) << " ";
         cout << "\nright: ";
-        for (auto i : recording)
-            cout << i.second.second << " ";
+        for (auto i : recorder)
+            cout << get<2>(i) << " ";
         cout << "\n\n";
-        recording.clear();
+        recorder.clear();
         tree->~BinaryTree();
     }
 }
