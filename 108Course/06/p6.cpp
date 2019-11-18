@@ -13,9 +13,12 @@ class TreeNode {
     }
     friend class BinaryTree;
     TreeNode* findSucc() {
-        TreeNode* current = this->right;
-        while (current && current->left)
+        TreeNode *current = this->right, *preverious = current;
+        while (current && current->left) {
+            preverious = current;
             current = current->left;
+        }
+        preverious->left = nullptr;
         return current;
     }
 
