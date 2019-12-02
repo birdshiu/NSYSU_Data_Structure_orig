@@ -24,7 +24,7 @@ class HuffmanNode {
 HuffmanNode* mergeHuffmanTree(map<uChar, int>& nodeTable);
 void assignCompressCode(HuffmanNode* current, string code);
 void recordingLeafs(HuffmanNode* current, vector<HuffmanNode*>& leafs);
-//void encoding(vector<HuffmanNode*>& leafs, vector<uChar>& rawData);
+void encoding(vector<HuffmanNode*>& leafs, vector<uChar>& rawData, vector<bool>& encodedData);
 void writeCompressResult(string inputFileName, int originSize, HuffmanNode* root, vector<uChar>& rawData);
 void printAllCompressCode(vector<HuffmanNode*>& records);
 void compress(string fileName);

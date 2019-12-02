@@ -57,4 +57,16 @@ vector<uChar> concatenateBits(vector<uChar> resultOfConcatenate,
                               vector<uChar> originData,
                               int bitsWidth) {
 }
+
+void printComperssHeader(ofstream& outFile, int originSize, int compressSize, double compressRate) {
+    /*
+    * header format:
+    * |originSize(4Bytes)|compressSize (4Bytes)|IEEE-754 for compressRate|
+    * |codingTable.size(1Byte)|
+    * codingtable:
+    * |uChar(1Byte)|codingLength(1Byte)|coding contents|
+    * 
+    */
+    //outFile << ;
+}
 }  // namespace tools
