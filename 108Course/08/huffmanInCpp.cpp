@@ -25,6 +25,8 @@ HuffmanNode::HuffmanNode(HuffmanNode* leftNode, HuffmanNode* rightNode) {
     left = leftNode;
     right = rightNode;
     parent = nullptr;
+    bool isSumByteOverflow = (left->byteByAscii + right->byteByAscii) > 255;
+    byteByAscii = (isSumByteOverflow)? 255: left->byteByAscii + right->byteByAscii;
     //maybe not done
 }
 
@@ -47,15 +49,13 @@ HuffmanNode* mergeHuffmanTree(map<uChar, int>& nodeTable) {
     return pq.top();
 }
 
-void assignCompressCode(HuffmanNode* current, uChar code = 0) {
+void assignCompressCode(HuffmanNode* current, string code = "") {
     if (current->left)
-        assignCompressCode(current->left, code << 1);
-    if (current->left == nullptr && current->right == nullptr) {
+        assignCompressCode(current->left, code + "0");
+    if (current->left == nullptr && current->right == nullptr)
         current->decompressCode = code;
-        current->codingLength = tools::getNumberWidth(code);
-    }
     if (current->right)
-        assignCompressCode(current->right, (code << 1) + 1);
+        assignCompressCode(current->right, code + "1");
 }
 
 void recordingLeafs(HuffmanNode* current, vector<HuffmanNode*>& leafs) {

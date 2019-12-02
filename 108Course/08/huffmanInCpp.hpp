@@ -18,7 +18,7 @@ class HuffmanNode {
 
     int frequency, codingLength;
     uChar byteByAscii;
-    uChar decompressCode;
+    string decompressCode;
     HuffmanNode *parent, *left, *right;
 };
 
