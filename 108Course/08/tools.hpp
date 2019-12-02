@@ -1,3 +1,5 @@
+#include <fstream>
+#include <iostream>
 #include <regex>
 #include <string>
 #include <vector>
@@ -28,24 +30,31 @@ int getNumberWidth(uChar a) {
 
 string genOutputName(string inputFileName) {
     regex getFileName("[^/]*$");
-    string outputName;
-    regex_search(inputFileName, outputName, getFileName);
+    smatch nameBody;
+    regex_match(inputFileName, nameBody, getFileName);
+    string outputName = nameBody.str();
     outputName.append(".compress");
+    cout << outputName << endl;
     return outputName;
 }
 
 struct cmpNodes {
     bool operator()(const HuffmanNode* lhs, const HuffmanNode* rhs) {
         if (lhs->frequency != rhs->frequency)
-            return lhs->frequency < rhs->frequency;
-        return lhs->byteByAscii > rhs->byteByAscii;
+            return lhs->frequency > rhs->frequency;
+        return lhs->byteByAscii < rhs->byteByAscii;
     }
 };
+
+void printAllCompressCode(vector<HuffmanNode*>& records) {
+    for (auto i : records) {
+        cout << i->byteByAscii << " " << i->decompressCode << endl;
+    }
+}
 
 //concatenate function
 vector<uChar> concatenateBits(vector<uChar> resultOfConcatenate,
                               vector<uChar> originData,
                               int bitsWidth) {
-    
 }
 }  // namespace tools

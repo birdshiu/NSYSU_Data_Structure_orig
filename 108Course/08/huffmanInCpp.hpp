@@ -2,8 +2,8 @@
 #define HUFFMAN
 
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
 #include "huffmanInCpp.hpp"
 #define uChar unsigned char
 
@@ -18,8 +18,15 @@ class HuffmanNode {
 
     int frequency, codingLength;
     uChar byteByAscii;
-    string decompressCode;
+    std::string decompressCode;
     HuffmanNode *parent, *left, *right;
 };
-
+HuffmanNode* mergeHuffmanTree(map<uChar, int>& nodeTable);
+void assignCompressCode(HuffmanNode* current, string code);
+void recordingLeafs(HuffmanNode* current, vector<HuffmanNode*>& leafs);
+//void encoding(vector<HuffmanNode*>& leafs, vector<uChar>& rawData);
+void writeCompressResult(string inputFileName, int originSize, HuffmanNode* root, vector<uChar>& rawData);
+void printAllCompressCode(vector<HuffmanNode*>& records);
+void compress(string fileName);
+void decompress(string fileName);
 #endif
