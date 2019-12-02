@@ -65,6 +65,6 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "regex": "cpp"
+        "queue": "cpp"
     }
 }

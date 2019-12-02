@@ -59,19 +59,14 @@ void merge(int* arr, int front, int tail, int middle) {
     int i = 0, j = 0, k = front;
     while (i < leftSize && j < rightSize) {
         if (leftSubArray[i] <= rightSubArray[j])
-            arr[k] = leftSubArray[i++];
+            arr[k++] = leftSubArray[i++];
         else
-            arr[k] = rightSubArray[j++];
-        k++;
+            arr[k++] = rightSubArray[j++];
     }
-    while (i < leftSize) {  //still have element in leftSubArray
-        arr[k] = leftSubArray[i++];
-        k++;
-    }
-    while (j < rightSize) {
-        arr[k] = rightSubArray[j++];
-        k++;
-    }
+    while (i < leftSize)  //still have element in leftSubArray
+        arr[k++] = leftSubArray[i++];
+    while (j < rightSize)
+        arr[k++] = rightSubArray[j++];
     delete[] leftSubArray;
     delete[] rightSubArray;
 }
@@ -88,10 +83,9 @@ void mergeSort(int* arr, int front, int tail) {
 int getIndexAndDivide(int* arr, int front, int tail) {
     int pivot = arr[tail];
     int i = front - 1;
-    for (auto j = front; j < tail; j++) {
+    for (auto j = front; j < tail; j++)
         if (arr[j] < pivot)
             swap(arr[++i], arr[j]);
-    }
     swap(arr[++i], arr[tail]);
     return i;
 }
@@ -105,7 +99,7 @@ void quickSort(int* arr, int front, int tail) {
 }
 
 int compareOfqSsort(const void* a, const void* b) {
-    return (*(int*)a - *(int*)b);
+    return (*(long int*)a - *(long int*)b);
 }
 
 int main() {
