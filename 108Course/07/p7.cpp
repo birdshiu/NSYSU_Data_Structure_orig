@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <fstream>
@@ -6,7 +7,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <cstdlib>
 using namespace std;
 
 int* generateArray(int size) {
@@ -29,8 +29,7 @@ void outputResult(string sortingAlgorithm, int* arr, int size, float deltaTime) 
     ofstream outputFile(sortingAlgorithm + to_string(size) + ".txt", ofstream::out);
     outputFile << "The total time is " << deltaTime << " seconds\n";
     for (auto i = 0; i < size; i++)
-        outputFile
-            << arr[i] << "\n";
+        outputFile << arr[i] << "\n";
     outputFile.close();
 }
 
