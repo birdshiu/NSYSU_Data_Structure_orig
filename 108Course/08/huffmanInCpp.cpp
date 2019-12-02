@@ -6,7 +6,6 @@
 #include <iostream>
 #include <map>
 #include <queue>
-#include <regex>
 #include <vector>
 #include "tools.hpp"
 #define uChar unsigned char
