@@ -47,9 +47,12 @@ struct cmpNodes {
 };
 
 void printAllCompressCode(vector<HuffmanNode*>& records) {
+    int sumLength = 0;
     for (auto i : records) {
         cout << i->byteByAscii << " " << i->decompressCode << endl;
+        sumLength += i->decompressCode.size();
     }
+    cout << "mean length is: " << sumLength / records.size() << endl;
 }
 
 //concatenate function
