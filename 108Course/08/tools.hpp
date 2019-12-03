@@ -127,7 +127,7 @@ void viewByteAsINT(vector<uChar>& bytesArray) {
     cout << endl;
 }
 
-void printComperssHeader(ofstream& outFile, int originSize, int compressSize, vector<HuffmanNode*> leafs, int encodedDataSize) {
+void outputComperssHeader(ofstream& outFile, int originSize, int compressSize, vector<HuffmanNode*> leafs, int encodedDataSize) {
     /*
     * little endian
     * header format:

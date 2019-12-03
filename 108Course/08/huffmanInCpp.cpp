@@ -91,7 +91,7 @@ void writeCompressResult(string inputFileName, int originSize, HuffmanNode* root
     }
 
     auto CompressedSize = encodedData.size() * sizeof(bool);
-    tools::printComperssHeader(outFile, originSize, CompressedSize, leafs, encodedData.size());
+    tools::outputComperssHeader(outFile, originSize, CompressedSize, leafs, encodedData.size());
 
     int peddingDataLength = tools::genPeddingLength(encodedData.size());
     for (int i = 0; i < peddingDataLength; i++)
