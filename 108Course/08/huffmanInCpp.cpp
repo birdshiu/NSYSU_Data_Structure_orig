@@ -6,7 +6,6 @@
 #include <iostream>
 #include <map>
 #include <queue>
-#include <regex>
 #include <vector>
 #include "tools.hpp"
 #define uChar unsigned char
@@ -15,7 +14,6 @@ using namespace std;
 HuffmanNode::HuffmanNode(uChar _singleByte, int _frequency) {
     byteByAscii = _singleByte;
     frequency = _frequency;
-    codingLength = 0;
     parent = left = right = nullptr;
 }
 
@@ -70,16 +68,12 @@ void recordingLeafs(HuffmanNode* current, vector<HuffmanNode*>& leafs) {
 void encoding(vector<HuffmanNode*>& leafs, vector<uChar>& rawData, vector<bool>& encodedData) {
     map<uChar, string> encodingTable;
     for (auto i : leafs)
-        encodingTable[i->byteByAscii] = i->decompressCode;
-    for (auto iter = rawData.begin(); iter != rawData.end(); iter++) {
-        auto getCode = find(encodingTable.begin(), encodingTable.end(), *iter);
-        if (getCode == encodingTable.end())
-            throw "no match on encoding table!";
+        encodingTable.insert(pair<uChar, string>(i->byteByAscii, i->decompressCode));
 
-        //fill bits into encodedData
-        auto bitsString = getCode->second;
-        for (auto i : bitsString)
-            encodedData.push_back(i - '0');
+    for (auto iter = rawData.begin(); iter != rawData.end(); iter++) {
+        auto getCode = encodingTable.at(*iter);
+        for (auto i : getCode)
+            encodedData.push_back(i - '0');  //fill bits into encodedData
     }
 }
 
@@ -97,22 +91,18 @@ void writeCompressResult(string inputFileName, int originSize, HuffmanNode* root
     }
 
     auto CompressedSize = encodedData.size() * sizeof(bool);
+    tools::printComperssHeader(outFile, originSize, CompressedSize, leafs, encodedData.size());
 
-    /*outFile << "Origin file size(Byte): " << originSize << endl;
-    outFile << "Comperssed file size(Byte): " << CompressedSize << endl;
-    outFile << "Compress rate: " << CompressedSize * 1.0 / originSize << endl;
-    
+    int peddingDataLength = tools::genPeddingLength(encodedData.size());
+    for (int i = 0; i < peddingDataLength; i++)
+        encodedData.push_back(0);  //pedding encoded data
 
-    for (auto nodes : leafs) {
-        outFile << nodes->byteByAscii << " = " << nodes->decompressCode << endl;
-    }*/
-
-    outFile << "----------" << endl;
-    // output compressed Data
-    /*for (auto i : rawData) {
-        bitset<bitsWidth> b(i);  //must be const, hence will use concatenate bits to output
-        outFile << b;
-    }*/
+    vector<uChar> bodyBytes;
+    auto [encodedDataByteArray, encodedDataByteArraySize] = tools::convertToByte(encodedData);
+    tools::pushByteToVector(encodedDataByteArray, encodedDataByteArraySize, bodyBytes);  //bytes to vector
+    delete[] encodedDataByteArray;                                                       //release used memory
+    for (auto i : bodyBytes)
+        outFile << i;
 
     outFile.close();
 }
@@ -140,8 +130,8 @@ void compress(string fileName) {
     assignCompressCode(root, "");
     vector<HuffmanNode*> leafs;
     recordingLeafs(root, leafs);
-    tools::printAllCompressCode(leafs);
-    //writeCompressResult(fileName, inputSize, root, rawData);
+    //tools::printAllCompressCode(leafs);
+    writeCompressResult(fileName, inputSize, root, rawData);
 }
 
 void decompress(string fileName) {

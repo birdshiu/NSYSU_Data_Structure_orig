@@ -16,7 +16,7 @@ class HuffmanNode {
 
     friend bool operator<(const HuffmanNode& lhs, const HuffmanNode& rhs);
 
-    int frequency, codingLength;
+    int frequency;
     uChar byteByAscii;
     std::string decompressCode;
     HuffmanNode *parent, *left, *right;
