@@ -1,3 +1,5 @@
+#ifndef TOOLS
+#define TOOLS
 #include <fstream>
 #include <iostream>
 #include <regex>
@@ -176,3 +178,4 @@ void outputComperssHeader(ofstream& outFile, int originSize, int compressSize, v
         outFile << i;
 }
 }  // namespace tools
+#endif
