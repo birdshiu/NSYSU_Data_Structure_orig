@@ -2,6 +2,7 @@
 using namespace std;
 
 int main() {
-    compress("./text");
+    //compress("dataSet/text");
+    compress("dataSet/random");
     return 0;
 }
