@@ -91,7 +91,19 @@ void writeCompressResult(string inputFileName, int originSize, HuffmanNode* root
     }
 
     auto CompressedSize = encodedData.size() * sizeof(bool);
-    tools::printComperssFile(outFile, originSize, CompressedSize, leafs, encodedData);
+    tools::printComperssHeader(outFile, originSize, CompressedSize, leafs, encodedData.size());
+
+    int peddingDataLength = tools::genPeddingLength(encodedData.size());
+    for (int i = 0; i < peddingDataLength; i++)
+        encodedData.push_back(0);  //pedding encoded data
+
+    vector<uChar> bodyBytes;
+    auto [encodedDataByteArray, encodedDataByteArraySize] = tools::convertToByte(encodedData);
+    tools::pushByteToVector(encodedDataByteArray, encodedDataByteArraySize, bodyBytes);  //bytes to vector
+    delete[] encodedDataByteArray;                                                       //release used memory
+    for (auto i : bodyBytes)
+        outFile << i;
+
     outFile.close();
 }
 
