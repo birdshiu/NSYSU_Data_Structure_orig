@@ -67,5 +67,9 @@
         "valarray": "cpp",
         "queue": "cpp",
         "regex": "cpp"
-    }
+    },
+    "editor.fontLigatures": true,
+    "[javascript]": {
+        "editor.fontLigatures": "'ss02', 'ss19'",
+    },
 }
