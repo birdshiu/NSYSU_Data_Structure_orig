@@ -52,12 +52,6 @@ void printAllCompressCode(vector<HuffmanNode*>& records) {
     cout << "mean length is: " << sumLength / records.size() << endl;
 }
 
-//concatenate function
-vector<uChar> concatenateBits(vector<uChar> resultOfConcatenate,
-                              vector<uChar> originData,
-                              int bitsWidth) {
-}
-
 pair<uChar*, int> convertToByte(int _value) {
     uChar* arr = new uChar[sizeof(_value)]();
     unsigned char const* p = reinterpret_cast<unsigned char const*>(&_value);
