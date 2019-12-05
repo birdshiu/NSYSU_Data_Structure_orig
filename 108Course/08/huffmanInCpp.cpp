@@ -77,23 +77,24 @@ void encoding(vector<HuffmanNode*>& leafs, vector<uChar>& rawData, vector<bool>&
     }
 }
 
-void writeCompressResult(string inputFileName, int originSize, HuffmanNode* root, vector<uChar>& rawData) {
-    vector<HuffmanNode*> leafs;
+void writeCompressResult(string inputFileName, int originSize, vector<HuffmanNode*> leafs, vector<uChar>& rawData) {
     vector<bool> encodedData;
     string outputName = tools::genOutputName(inputFileName);
     ofstream outFile(outputName);
 
-    recordingLeafs(root, leafs);
     try {
         encoding(leafs, rawData, encodedData);
     } catch (const std::exception& e) {
         std::cerr << e.what() << '\n';
     }
 
-    auto CompressedSize = encodedData.size() * sizeof(bool);
-    tools::outputComperssHeader(outFile, originSize, CompressedSize, leafs, encodedData.size());
+    auto CompressedSize = encodedData.size();
 
-    int peddingDataLength = tools::genPeddingLength(encodedData.size());
+    //cout << "Size compare: " << originSize << "(Bytes) | " << CompressedSize << "(Bits)" << endl;
+
+    tools::writeHeader(outFile, originSize, CompressedSize, leafs, encodedData.size());
+
+    int peddingDataLength = tools::genPaddingLength(encodedData.size());
     for (int i = 0; i < peddingDataLength; i++)
         encodedData.push_back(0);  //pedding encoded data
 
@@ -131,10 +132,27 @@ void compress(string fileName) {
     vector<HuffmanNode*> leafs;
     recordingLeafs(root, leafs);
     //tools::printAllCompressCode(leafs);
-    writeCompressResult(fileName, inputSize, root, rawData);
+    writeCompressResult(fileName, inputSize, leafs, rawData);
 }
 
 void decompress(string fileName) {
+    vector<uChar> rawData;
+    int inputSize = 0;
+    HuffmanNode* root;
+    map<uChar, vector<bool>> decodeTable;
+
+    //read raw file to vector
+    try {
+        inputSize = tools::readOriginFileToVector(fileName, rawData);
+    } catch (const exception& e) {
+        cerr << e.what() << '\n';
+        exit(1);
+    }
+    auto [originSize, compressBitsLength, codingTableSize, dataPeddingLength] = tools::readHeader(rawData);
+    //cout << originSize << "|" << compressBitsLength << "|" << codingTableSize << "|" << dataPeddingLength << endl;
+
+    tools::readDecodeTable(rawData, decodeTable, codingTableSize);
+    //check recover by outSize and originSize
 }
 
 /*
