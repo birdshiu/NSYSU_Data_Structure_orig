@@ -240,7 +240,7 @@ void readDecodeTable(vector<uChar>& rawData, map<uChar, vector<bool>>& decodeTab
         int paddingLength = ((int(codingLength / 8) + 1) * 8 - codingLength) % 8;
 
         int totalBytes = (codingLength + paddingLength) / 8;
-        decodeTable.insert(make_pair(element, vector<bool>());
+        decodeTable.insert(make_pair(element, vector<bool>()));
 
         uChar* codingBuffer = new uChar[totalBytes]();
         for (int j = 0; j < totalBytes; j++) {
@@ -251,6 +251,22 @@ void readDecodeTable(vector<uChar>& rawData, map<uChar, vector<bool>>& decodeTab
         stepForward(rawData, totalBytes + 2);
     }
     //printReadDecodeTable(decodeTable);
+}
+
+void bitStream2String(vector<uChar>& rawData, string& _result, int paddingLength) {
+    for (int i = 0; i < rawData.size(); i++) {
+        vector<bool> tmp;
+        bytes2BitsVector(&rawData[i], 1, 0, tmp);
+        for (auto j : tmp)
+            _result.push_back(char(int(j) + '0'));
+    }
+    for (int i = 0; i < paddingLength; i++)
+        _result.pop_back();
+}
+
+void bits2string(vector<bool>& _bits, string& _result) {
+    for (auto i : _bits)
+        _result.push_back(char(int(i) + '0'));
 }
 }  // namespace tools
 #endif

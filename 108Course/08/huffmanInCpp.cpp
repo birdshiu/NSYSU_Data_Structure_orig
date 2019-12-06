@@ -135,11 +135,24 @@ void compress(string fileName) {
     writeCompressResult(fileName, inputSize, leafs, rawData);
 }
 
+string decoding(map<string, uChar>& _table, string& bitStringData) {
+    string tmp, result;
+    for (auto iter = bitStringData.begin(); iter != bitStringData.end(); iter++) {
+        tmp.push_back(*iter);
+        auto isFound = _table.find(tmp);
+        if (isFound != _table.end()) {
+            tmp = "";
+            result.push_back(char(isFound->second));
+        }
+    }
+    return result;
+}
+
 void decompress(string fileName) {
     vector<uChar> rawData;
     int inputSize = 0;
     HuffmanNode* root;
-    map<uChar, vector<bool>> decodeTable;
+    map<uChar, vector<bool>> bitsTable;
 
     //read raw file to vector
     try {
@@ -151,7 +164,29 @@ void decompress(string fileName) {
     auto [originSize, compressBitsLength, codingTableSize, dataPeddingLength] = tools::readHeader(rawData);
     //cout << originSize << "|" << compressBitsLength << "|" << codingTableSize << "|" << dataPeddingLength << endl;
 
-    tools::readDecodeTable(rawData, decodeTable, codingTableSize);
+    tools::readDecodeTable(rawData, bitsTable, codingTableSize);
+    map<string, uChar> stringTable;
+    for (auto i : bitsTable) {
+        auto [key, value] = i;
+        string tmp;
+        tools::bits2string(value, tmp);
+        stringTable.insert(make_pair(tmp, key));
+    }
+
+    string bitStringData;
+    tools::bitStream2String(rawData, bitStringData, dataPeddingLength);
+    rawData.clear();
+    rawData.shrink_to_fit();
+
+    for (auto i : stringTable) {
+        cout << i.second << " " << i.first << endl;
+    }
+    for (int i = 0; i < 10; i++)
+        cout << bitStringData.at(i);
+    cout << endl;
+    //string decodedResult = decoding(stringTable, bitStringData);
+    //cout << decodedResult << endl;
+
     //check recover by outSize and originSize
 }
 
