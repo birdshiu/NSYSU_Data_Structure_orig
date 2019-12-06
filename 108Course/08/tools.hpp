@@ -136,15 +136,6 @@ void viewByteAsINT(vector<uChar>& bytesArray) {
 }
 
 void writeHeader(ofstream& outFile, int originSize, int compressSize, vector<HuffmanNode*> leafs, int encodedDataSize) {
-    /*
-    * little endian
-    * header format:
-    * |originSize(4Bytes)|compressBitsLength (4Bytes)|IEEE-754 for compressRate(4Byte)|
-    * |codingTable.size(1Byte)|padding.length(1Byte)|
-    * codingtable:
-    * |uChar(1Byte)|codingLength(1Byte)|coding contents|
-    * 
-    */
     float compressRate = compressSize * 1.0 / originSize;
     vector<uChar> headerBytes;
 
