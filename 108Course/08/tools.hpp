@@ -174,7 +174,7 @@ void writeHeader(ofstream& outFile, int originSize, int compressSize, vector<Huf
         outFile << i;
 }
 
-void bytes2BitsVector(uChar* arr, int arrSize, int peddingSize, vector<bool>& _destination) {
+void bytes2BitsVector(uChar* arr, int arrSize, int peddingSize, vector<bool>& _destination) {  //to be deleted
     unsigned int buffer = 0;
     memcpy(&buffer, arr, arrSize);
     buffer >>= peddingSize;
@@ -186,13 +186,27 @@ void bytes2BitsVector(uChar* arr, int arrSize, int peddingSize, vector<bool>& _d
     reverse(_destination.begin(), _destination.end());
 }
 
-void printReadDecodeTable(map<uChar, vector<bool>>& decodeTable) {
-    for (auto i : decodeTable) {
-        cout << (int)i.first << " ";
-        for (auto j : i.second)
-            cout << j;
-        cout << endl;
+string byte2BinaryString(uChar* arr, int arrSize, int paddingLength) {
+    string tmp;
+    string result;
+    for (int i = 0; i < arrSize; i++) {
+        uChar oneByteBuffer = 0;
+        memcpy(&oneByteBuffer, &arr[i], sizeof(uChar));
+        for (int j = 0; j < 8; j++) {
+            tmp.push_back(char(abs((oneByteBuffer % 2)) + '0'));    // sometimes there is strange for mod 2 getting -1, hence use adb to make it possitive
+            oneByteBuffer /= 2;
+        }
+        reverse(tmp.begin(), tmp.end());
+        result.append(tmp);
+        tmp = "";
     }
+    result.erase(result.end() - paddingLength, result.end());  //remove padding
+    return result;
+}
+
+void printReadDecodeTable(map<string, uChar>& decodeTable) {
+    for (auto i : decodeTable) 
+        cout << i.second << " " << i.first << endl;
 }
 
 void stepForward(vector<uChar>& _data, int steps) {
@@ -224,40 +238,30 @@ auto readHeader(vector<uChar>& rawData) {
     return make_tuple(originSize, compressBitsLength, codingTableSize, datapaddingLength);
 }
 
-void readDecodeTable(vector<uChar>& rawData, map<uChar, vector<bool>>& decodeTable, int decodingTableSize) {
+void readDecodeTable(vector<uChar>& rawData, map<string, uChar>& decodeTable, int decodingTableSize) {
     for (int i = 0; i < decodingTableSize; i++) {
         uChar element = rawData.at(0);
         int codingLength = int(rawData.at(1));  // length of bits
         int paddingLength = ((int(codingLength / 8) + 1) * 8 - codingLength) % 8;
 
         int totalBytes = (codingLength + paddingLength) / 8;
-        decodeTable.insert(make_pair(element, vector<bool>()));
-
         uChar* codingBuffer = new uChar[totalBytes]();
         for (int j = 0; j < totalBytes; j++) {
             codingBuffer[j] = rawData.at(j + 2);
         }
-        bytes2BitsVector(codingBuffer, totalBytes, paddingLength, decodeTable.at(element));
+        string code = byte2BinaryString(codingBuffer, totalBytes, paddingLength);
+        decodeTable.insert(make_pair(code, element));
+
         delete[] codingBuffer;
         stepForward(rawData, totalBytes + 2);
     }
     //printReadDecodeTable(decodeTable);
 }
 
-void bitStream2String(vector<uChar>& rawData, string& _result, int paddingLength) {
-    for (int i = 0; i < rawData.size(); i++) {
-        vector<bool> tmp;
-        bytes2BitsVector(&rawData[i], 1, 0, tmp);
-        for (auto j : tmp)
-            _result.push_back(char(int(j) + '0'));
-    }
-    for (int i = 0; i < paddingLength; i++)
-        _result.pop_back();
-}
-
-void bits2string(vector<bool>& _bits, string& _result) {
-    for (auto i : _bits)
-        _result.push_back(char(int(i) + '0'));
+string bitStream2String(vector<uChar>& rawData, int paddingLength) {
+    string dataBits = byte2BinaryString(&rawData[0], rawData.size(), 0);
+    dataBits.erase(dataBits.end() - paddingLength, dataBits.end());  //remove padding
+    return dataBits;
 }
 }  // namespace tools
 #endif
