@@ -10,15 +10,14 @@
 namespace tools {
 using namespace std;
 
-int readOriginFileToVector(string fileName, vector<uChar>& rawData) {
+auto readOriginFileToVector(string fileName, vector<uChar>& rawData) {
     // will be return the file size by byte
     ifstream inFile(fileName, ios::in | ios::binary);
     if (inFile.fail())
         throw "Read File Error";
     if (inFile.good())
         rawData = vector<uChar>(istreambuf_iterator<char>(inFile), istreambuf_iterator<char>());
-    //int fullSize = rawData.size();
-    int fullSize = inFile.tellg();
+    auto fullSize = rawData.size();
     inFile.close();
     return fullSize;
 }
@@ -169,21 +168,8 @@ void writeHeader(ofstream& outFile, int originSize, int compressSize, vector<Huf
     }
 
     //viewByteAsINT(headerBytes);
-
     for (auto i : headerBytes)
         outFile << i;
-}
-
-void bytes2BitsVector(uChar* arr, int arrSize, int peddingSize, vector<bool>& _destination) {  //to be deleted
-    unsigned int buffer = 0;
-    memcpy(&buffer, arr, arrSize);
-    buffer >>= peddingSize;
-    for (int i = 0; i < arrSize * 8 - peddingSize; i++) {
-        bool tailBit = buffer % 2;
-        _destination.push_back(tailBit);
-        buffer >>= 1;
-    }
-    reverse(_destination.begin(), _destination.end());
 }
 
 string byte2BinaryString(uChar* arr, int arrSize, int paddingLength) {

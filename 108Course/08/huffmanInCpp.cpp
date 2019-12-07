@@ -77,7 +77,7 @@ void encoding(vector<HuffmanNode*>& leafs, vector<uChar>& rawData, vector<bool>&
     }
 }
 
-void writeCompressResult(string inputFileName, int originSize, vector<HuffmanNode*> leafs, vector<uChar>& rawData) {
+void writeCompressResult(string inputFileName, size_t originSize, vector<HuffmanNode*> leafs, vector<uChar>& rawData) {
     vector<bool> encodedData;
     string outputName = tools::genOutputName(inputFileName);
     ofstream outFile(outputName);
@@ -89,11 +89,7 @@ void writeCompressResult(string inputFileName, int originSize, vector<HuffmanNod
     }
 
     auto CompressedSize = encodedData.size();
-
-    //cout << "Size compare: " << originSize << "(Bytes) | " << CompressedSize << "(Bits)" << endl;
-
     tools::writeHeader(outFile, originSize, CompressedSize, leafs, encodedData.size());
-
     int peddingDataLength = tools::genPaddingLength(encodedData.size());
     for (int i = 0; i < peddingDataLength; i++)
         encodedData.push_back(0);  //pedding encoded data
@@ -110,7 +106,7 @@ void writeCompressResult(string inputFileName, int originSize, vector<HuffmanNod
 
 void compress(string fileName) {
     vector<uChar> rawData;
-    int inputSize;
+    size_t inputSize;
     HuffmanNode* root;
 
     //read raw file to vector
@@ -161,14 +157,13 @@ void decompress(string fileName) {
         cerr << e.what() << '\n';
         exit(1);
     }
-    auto [originSize, compressBitsLength, codingTableSize, dataPeddingLength] = tools::readHeader(rawData);
-    //cout << originSize << "|" << compressBitsLength << "|" << codingTableSize << "|" << dataPeddingLength << endl;
 
+    auto [originSize, compressBitsLength, codingTableSize, dataPeddingLength] = tools::readHeader(rawData);
     tools::readDecodeTable(rawData, stringTable, codingTableSize);
 
     string bitStringData = tools::bitStream2String(rawData, dataPeddingLength);
-    //rawData.clear();
-    //rawData.shrink_to_fit();
+    rawData.clear();
+    rawData.shrink_to_fit();
 
     string decodedResult = decoding(stringTable, bitStringData);
     //cout << decodedResult;
@@ -176,6 +171,7 @@ void decompress(string fileName) {
     ofstream outFile(fileName.append(".decompress"));
     outFile << decodedResult;
     outFile.close();
+
     //check recover by outSize and originSize
     if (decodedResult.length() == originSize)
         cout << "decompress success!" << endl;
