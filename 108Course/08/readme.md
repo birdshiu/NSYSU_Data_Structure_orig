@@ -20,10 +20,9 @@ https://stackoverflow.com/questions/145270/calling-c-c-from-python
  codingtable:
  |uChar(1Byte)|codingLength(1Byte)|coding contents|
 
+==Warning==
+input file(to compress) MAX size is 512.0 MB
+
 
 --TO DO--
-1. fix coded data 
-2. coding length must bigger to repersnt larger file
-3. more efficiency
-    * not use string to decode ?
-    * reduce memory useage 
+1. merge C++ so file to python
