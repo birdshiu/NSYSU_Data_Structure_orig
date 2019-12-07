@@ -104,7 +104,7 @@ void writeCompressResult(string inputFileName, size_t originSize, vector<Huffman
     outFile.close();
 }
 
-void compress(string fileName) {
+bool compress(string fileName) {
     vector<uChar> rawData;
     size_t inputSize;
     HuffmanNode* root;
@@ -114,7 +114,7 @@ void compress(string fileName) {
         inputSize = tools::readOriginFileToVector(fileName, rawData);
     } catch (const exception& e) {
         cerr << e.what() << '\n';
-        exit(1);
+        return false;
     }
 
     // collect byte frequency in map
@@ -129,6 +129,7 @@ void compress(string fileName) {
     recordingLeafs(root, leafs);
     //tools::printAllCompressCode(leafs);
     writeCompressResult(fileName, inputSize, leafs, rawData);
+    return true;
 }
 
 string decoding(map<string, uChar>& _table, string& bitStringData) {
@@ -144,7 +145,7 @@ string decoding(map<string, uChar>& _table, string& bitStringData) {
     return result;
 }
 
-void decompress(string fileName) {
+bool decompress(string fileName) {
     vector<uChar> rawData;
     int inputSize = 0;
     HuffmanNode* root;
@@ -155,7 +156,7 @@ void decompress(string fileName) {
         inputSize = tools::readOriginFileToVector(fileName, rawData);
     } catch (const exception& e) {
         cerr << e.what() << '\n';
-        exit(1);
+        return false;
     }
 
     auto [originSize, compressBitsLength, codingTableSize, dataPeddingLength] = tools::readHeader(rawData);
@@ -174,9 +175,9 @@ void decompress(string fileName) {
 
     //check recover by outSize and originSize
     if (decodedResult.length() == originSize)
-        cout << "decompress success!" << endl;
+        return true;
     else
-        cout << "decompress failed!" << endl;
+        return false;
 }
 
 /*

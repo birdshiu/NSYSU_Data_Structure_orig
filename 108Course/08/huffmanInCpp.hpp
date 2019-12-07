@@ -27,6 +27,6 @@ void recordingLeafs(HuffmanNode* current, vector<HuffmanNode*>& leafs);
 void encoding(vector<HuffmanNode*>& leafs, vector<uChar>& rawData, vector<bool>& encodedData);
 void writeCompressResult(string inputFileName, int originSize, HuffmanNode* root, vector<uChar>& rawData);
 void printAllCompressCode(vector<HuffmanNode*>& records);
-void compress(string fileName);
-void decompress(string fileName);
+bool compress(string fileName);
+bool decompress(string fileName);
 #endif
