@@ -79,7 +79,7 @@ void encoding(vector<HuffmanNode*>& leafs, vector<uChar>& rawData, vector<bool>&
 
 void writeCompressResult(string inputFileName, size_t originSize, vector<HuffmanNode*> leafs, vector<uChar>& rawData) {
     vector<bool> encodedData;
-    string outputName = tools::genOutputName(inputFileName);
+    string outputName(inputFileName.append(".compress"));
     ofstream outFile(outputName);
 
     try {

@@ -3,7 +3,6 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
-
 #include <string>
 #include <vector>
 #include "huffmanInCpp.hpp"
@@ -20,20 +19,6 @@ auto readOriginFileToVector(string fileName, vector<uChar>& rawData) {
     auto fullSize = rawData.size();
     inFile.close();
     return fullSize;
-}
-
-int getNumberWidth(uChar a) {
-    int counter = 0;
-    while (a) {
-        counter++;
-        a /= 10;
-    }
-    return counter;
-}
-
-string genOutputName(string inputFileName) {
-    inputFileName.append(".compress");
-    return inputFileName;
 }
 
 struct cmpNodes {
@@ -179,7 +164,7 @@ string byte2BinaryString(uChar* arr, int arrSize, int paddingLength) {
         uChar oneByteBuffer = 0;
         memcpy(&oneByteBuffer, &arr[i], sizeof(uChar));
         for (int j = 0; j < 8; j++) {
-            tmp.push_back(char(abs((oneByteBuffer % 2)) + '0'));    // sometimes there is strange for mod 2 getting -1, hence use adb to make it possitive
+            tmp.push_back(char(abs((oneByteBuffer % 2)) + '0'));  // sometimes there is strange for mod 2 getting -1, hence use adb to make it possitive
             oneByteBuffer /= 2;
         }
         reverse(tmp.begin(), tmp.end());
@@ -191,7 +176,7 @@ string byte2BinaryString(uChar* arr, int arrSize, int paddingLength) {
 }
 
 void printReadDecodeTable(map<string, uChar>& decodeTable) {
-    for (auto i : decodeTable) 
+    for (auto i : decodeTable)
         cout << i.second << " " << i.first << endl;
 }
 
@@ -228,9 +213,9 @@ void readDecodeTable(vector<uChar>& rawData, map<string, uChar>& decodeTable, in
     for (int i = 0; i < decodingTableSize; i++) {
         uChar element = rawData.at(0);
         int codingLength = int(rawData.at(1));  // length of bits
-        int paddingLength = ((int(codingLength / 8) + 1) * 8 - codingLength) % 8;
-
+        int paddingLength = genPaddingLength(codingLength);
         int totalBytes = (codingLength + paddingLength) / 8;
+
         uChar* codingBuffer = new uChar[totalBytes]();
         for (int j = 0; j < totalBytes; j++) {
             codingBuffer[j] = rawData.at(j + 2);
