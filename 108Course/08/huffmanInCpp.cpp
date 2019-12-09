@@ -127,7 +127,7 @@ bool compress(string fileName) {
     assignCompressCode(root, "");
     vector<HuffmanNode*> leafs;
     recordingLeafs(root, leafs);
-    //tools::printAllCompressCode(leafs);
+    tools::printAllCompressCode(leafs);
     writeCompressResult(fileName, inputSize, leafs, rawData);
     return true;
 }
