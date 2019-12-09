@@ -25,7 +25,7 @@ struct cmpNodes {
     bool operator()(const HuffmanNode* lhs, const HuffmanNode* rhs) {
         if (lhs->frequency != rhs->frequency)
             return lhs->frequency > rhs->frequency;
-        return lhs->byteByAscii < rhs->byteByAscii;
+        return lhs->byteByAscii >= rhs->byteByAscii;
     }
 };
 
@@ -103,10 +103,7 @@ void pushByteToVector(uChar* arr, int arrSize, vector<uChar>& _dest) {
 }
 
 int genPaddingLength(int _value) {
-    int PaddingLength = 8 - (_value % 8);
-    if (PaddingLength == 8)
-        PaddingLength = 0;
-    return PaddingLength;
+    return ((int(_value / 8) + 1) * 8 - _value) % 8;
 }
 
 void viewByteAsINT(vector<uChar>& bytesArray) {
@@ -210,6 +207,8 @@ auto readHeader(vector<uChar>& rawData) {
 }
 
 void readDecodeTable(vector<uChar>& rawData, map<string, uChar>& decodeTable, int decodingTableSize) {
+    if (decodingTableSize == 0)
+        decodingTableSize = 256;
     for (int i = 0; i < decodingTableSize; i++) {
         uChar element = rawData.at(0);
         int codingLength = int(rawData.at(1));  // length of bits
@@ -231,7 +230,8 @@ void readDecodeTable(vector<uChar>& rawData, map<string, uChar>& decodeTable, in
 
 string bitStream2String(vector<uChar>& rawData, int paddingLength) {
     string dataBits = byte2BinaryString(&rawData[0], rawData.size(), 0);
-    dataBits.erase(dataBits.end() - paddingLength, dataBits.end());  //remove padding
+    if (paddingLength)
+        dataBits.erase(dataBits.end() - paddingLength, dataBits.end());  //remove padding
     return dataBits;
 }
 }  // namespace tools

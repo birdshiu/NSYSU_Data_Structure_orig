@@ -20,12 +20,10 @@ HuffmanNode::HuffmanNode(uChar _singleByte, int _frequency) {
 HuffmanNode::HuffmanNode(HuffmanNode* leftNode, HuffmanNode* rightNode) {
     frequency = leftNode->frequency + rightNode->frequency;
     leftNode->parent = rightNode->parent = this;
-    left = leftNode;
-    right = rightNode;
+    left = (leftNode->byteByAscii <= rightNode->byteByAscii) ? leftNode : rightNode;
+    right = (leftNode->byteByAscii > rightNode->byteByAscii) ? leftNode : rightNode;
     parent = nullptr;
-    bool isSumByteOverflow = (left->byteByAscii + right->byteByAscii) > 255;
-    byteByAscii = (isSumByteOverflow) ? 255 : left->byteByAscii + right->byteByAscii;
-    //maybe not done
+    byteByAscii = (int(left->byteByAscii) + int(right->byteByAscii)) / 2;
 }
 
 HuffmanNode* mergeHuffmanTree(map<uChar, int>& nodeTable) {
