@@ -8,22 +8,14 @@ from ctypes import cdll
 #from huffmanCoding import *
 
 
-"""
-
 if platform.system() == 'Windows':
     libc = cdll.LoadLibrary('huffman.dll')
 elif platform.system() == 'Linux':
     libc = cdll.LoadLibrary('huffman.so')
 
-class huffman(object):
-    def __init__(self):
-        self.obj = libc.
-"""
-
 
 def allDone():
     tkinter.messagebox.showinfo(title='Done!', message='done and exit')
-    # remember to close file
     sys.exit(0)
 
 # do decode
@@ -31,18 +23,22 @@ def allDone():
 
 def doDecode(fileName):
     print('start decode' + fileName)
-    h = HuffmanCoding(fileName)
-    h.decompress(fileName)
-    allDone()
+    isSuccess = libc.decompress(fileName)
+    if isSuccess:
+        tkinter.messagebox.showinfo(title='Success!', message='done and exit')
+    else:
+        tkinter.messagebox.showinfo(title='Failed!', message='Failed')
 
 
 # do encode
 
 def doEncode(fileName):
     print('start encode' + fileName)
-    h = HuffmanCoding(fileName)
-    h.compress()
-    allDone()
+    isSuccess = libc.compress(fileName)
+    if isSuccess:
+        tkinter.messagebox.showinfo(title='Success!', message='done and exit')
+    else:
+        tkinter.messagebox.showinfo(title='Failed!', message='Failed')
 
 
 window = tk.Tk()

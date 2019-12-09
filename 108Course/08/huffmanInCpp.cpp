@@ -169,7 +169,7 @@ bool decompress(string fileName) {
     string decodedResult = decoding(stringTable, bitStringData);
     //cout << decodedResult;
 
-    ofstream outFile(fileName.append(".decompress"));
+    ofstream outFile(fileName + string(".decompress"));
     outFile << decodedResult;
     outFile.close();
 

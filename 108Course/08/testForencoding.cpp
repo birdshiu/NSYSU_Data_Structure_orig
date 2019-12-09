@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
         if (string(argv[2]) == string("compress")) {
             result = compress(string(argv[1]));
         } else if (string(argv[2]) == string("decompress")) {
-            result = compress(string(argv[1]));
+            result = decompress(string(argv[1]));
         } else {
             cout << "Wrong option!" << endl;
         }
