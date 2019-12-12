@@ -7,8 +7,7 @@ The huffmanCoding.py is just for tersting
 
 compile info
 // remind me compiling cpp to so(cdll)
-g++-9 -std=c++2a tools.hpp huffmanInCpp.cpp huffmanInCpp.hpp -c -fPIC
-g++-9 -shared huffmanInCpp.o -o huffman.so
+g++-9 -fPIC -rdynamic -shared -std=c++2a tools.hpp huffmanInCpp.cpp huffmanInCpp.hpp -o huffman.so
 https://stackoverflow.com/questions/145270/calling-c-c-from-python
 
 
