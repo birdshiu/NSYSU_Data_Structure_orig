@@ -1,44 +1,33 @@
 import tkinter as tk
 import tkinter.messagebox
 import tkinter.ttk
-import platform
 from tkinter.filedialog import *
 from functools import partial
-from ctypes import cdll
-#from huffmanCoding import *
+import cppyy
 
-
-if platform.system() == 'Windows':
-    libc = cdll.LoadLibrary('huffman.dll')
-elif platform.system() == 'Linux':
-    libc = cdll.LoadLibrary('huffman.so')
-
-
-def allDone():
-    tkinter.messagebox.showinfo(title='Done!', message='done and exit')
-    sys.exit(0)
-
-# do decode
+cppyy.include('./huffmanInCpp.hpp')
+cppyy.include('./tools.hpp')
+cppyy.load_library('huffman.so')
 
 
 def doDecode(fileName):
-    print('start decode' + fileName)
-    isSuccess = libc.decompress(fileName)
+    print('start decode ' + fileName)
+    isSuccess = cppyy.gbl.decompress(fileName)
     if isSuccess:
         tkinter.messagebox.showinfo(title='Success!', message='done and exit')
     else:
         tkinter.messagebox.showinfo(title='Failed!', message='Failed')
+    sys.exit(0)
 
-
-# do encode
 
 def doEncode(fileName):
-    print('start encode' + fileName)
-    isSuccess = libc.compress(fileName)
+    print('start encode ' + fileName)
+    isSuccess = cppyy.gbl.compress(fileName)
     if isSuccess:
         tkinter.messagebox.showinfo(title='Success!', message='done and exit')
     else:
         tkinter.messagebox.showinfo(title='Failed!', message='Failed')
+    sys.exit(0)
 
 
 window = tk.Tk()
