@@ -85,16 +85,10 @@ pair<uChar*, int> convertToByte(vector<bool>& encodedData) {
 }
 
 int convertToINT(const vector<uChar>& _container) {
-    // convert first 4 btye to INT
-    if (_container.size() < 4) {
-        throw "wrong size of int";
-    }
-    uChar buffer[4] = {0};
-    for (int i = 0; i < 4; i++)
-        buffer[i] = _container.at(i);
-    int returnValue = 0;
-    memcpy(&returnValue, (char*)buffer, sizeof(int));
-    return returnValue;
+    // convert 4 bytes to INT
+    int result = 0;
+    memcpy(&result, &_container[0], sizeof(int));
+    return result;
 }
 
 void pushByteToVector(uChar* arr, int arrSize, vector<uChar>& _dest) {
@@ -116,7 +110,7 @@ void viewByteAsINT(vector<uChar>& bytesArray) {
     cout << endl;
 }
 
-void writeHeader(ofstream& outFile, int originSize, int compressSize, vector<HuffmanNode*> leafs, int encodedDataSize) {
+void writeHeader(ofstream& outFile, size_t originSize, size_t compressSize, vector<HuffmanNode*> leafs, size_t encodedDataSize) {
     float compressRate = compressSize * 1.0 / originSize;
     vector<uChar> headerBytes;
 
