@@ -1,8 +1,8 @@
 huffman coding
 ===
-This is a huffman encoding file application.
-You can use huffman.elf or main.cpp singly. 
-if you wnat to use this in debian environment, suggest you run setup.sh first!
+This is a huffman encoding file application.<br>
+You can use huffman.elf or main.cpp singly. <br>
+if you wnat to use this in debian environment, suggest you run setup.sh first!<br>
 
 # How to build
 * Compile cpp/hpp to elf:
@@ -23,11 +23,11 @@ if you wnat to use this in debian environment, suggest you run setup.sh first!
 # Header format 
  * little endian
  * header format(2 part):
-    info:
-        |originSize(4Bytes)|compressBitsLength (4Bytes)|IEEE-754 for compressRate(4Byte)|
-        |codingTable.size(1Byte)|padding.length(1Byte)|
-    codingtable:
-        |uChar(1Byte)|codingLength(1Byte)|coding contents|
+    info:<br>
+        |originSize(sizeof(size_t))|compressBitsLength (sizeof(size_t))|IEEE-754 for compressRate(4Byte)|<br>
+        |codingTable.size(1Byte)|padding.length(1Byte)|<br>
+    codingtable:<br>
+        |uChar(1Byte)|codingLength(1Byte)|coding contents|<br>
 
-==Warning==
-input file(to compress) MAX size is 512.0 MB
+==Warning==<br>
+input file(to compress) MAX size is 512.0 MB<br>
