@@ -33,3 +33,11 @@ if you wnat to use this in debian environment, suggest you run setup.sh first!<b
 
 ==Warning==<br>
 input file(to compress) MAX size is 2^31 GB<br>
+
+# Might do
+1. more clear and efficient while compress
+    * assign code have to traversal once
+    * record leafs also traversal once
+    * after recording leafs push all leafs in to map?
+    * **why don't I just push code into map once**
+        * Will this be "not clean code"?

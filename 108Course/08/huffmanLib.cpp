@@ -74,7 +74,20 @@ void encoding(vector<HuffmanNode*>& leafs, vector<uChar>& rawData, vector<bool>&
     }
 }
 
-void writeCompressResult(string inputFileName, size_t originSize, vector<HuffmanNode*> leafs, vector<uChar>& rawData) {
+string decoding(map<string, uChar>& _table, string& bitStringData) {
+    string tmp, result;
+    for (auto iter = bitStringData.begin(); iter != bitStringData.end(); iter++) {
+        tmp.push_back(*iter);
+        auto isFound = _table.find(tmp);
+        if (isFound != _table.end()) {
+            tmp = "";
+            result.push_back(char(isFound->second));
+        }
+    }
+    return result;
+}
+
+void writeCompressResult(string inputFileName, vector<HuffmanNode*> leafs, vector<uChar>& rawData) {
     vector<bool> encodedData;
     string outputName(inputFileName.append(".compress"));
     ofstream outFile(outputName);
@@ -82,11 +95,10 @@ void writeCompressResult(string inputFileName, size_t originSize, vector<Huffman
     try {
         encoding(leafs, rawData, encodedData);
     } catch (const std::exception& e) {
-        std::cerr << e.what() << '\n';
+        std::cerr << e.what() << endl;
     }
 
-    auto CompressedSize = encodedData.size();
-    tools::writeHeader(outFile, originSize, CompressedSize, leafs, encodedData.size());
+    tools::writeHeader(outFile, rawData.size(), encodedData.size(), leafs);
     int peddingDataLength = tools::genPaddingLength(encodedData.size());
     for (int i = 0; i < peddingDataLength; i++)
         encodedData.push_back(0);  //pedding encoded data
@@ -103,12 +115,13 @@ void writeCompressResult(string inputFileName, size_t originSize, vector<Huffman
 
 bool compress(string fileName) {
     vector<uChar> rawData;
-    size_t inputSize;
+    vector<HuffmanNode*> leafs;
     HuffmanNode* root;
+    bool isGoodFile = true;
 
     //read raw file to vector
     try {
-        inputSize = tools::readOriginFileToVector(fileName, rawData);
+        isGoodFile = tools::readOriginFileToVector(fileName, rawData);
     } catch (const exception& e) {
         cerr << e.what() << '\n';
         return false;
@@ -122,35 +135,21 @@ bool compress(string fileName) {
 
     root = mergeHuffmanTree(nodeTable);
     assignCompressCode(root, "");
-    vector<HuffmanNode*> leafs;
     recordingLeafs(root, leafs);
-    tools::printAllCompressCode(leafs);
-    writeCompressResult(fileName, inputSize, leafs, rawData);
-    return true;
-}
-
-string decoding(map<string, uChar>& _table, string& bitStringData) {
-    string tmp, result;
-    for (auto iter = bitStringData.begin(); iter != bitStringData.end(); iter++) {
-        tmp.push_back(*iter);
-        auto isFound = _table.find(tmp);
-        if (isFound != _table.end()) {
-            tmp = "";
-            result.push_back(char(isFound->second));
-        }
-    }
-    return result;
+    //tools::printCodingTable(leafs);
+    writeCompressResult(fileName, leafs, rawData);
+    return isGoodFile;
 }
 
 bool decompress(string fileName) {
     vector<uChar> rawData;
-    int inputSize = 0;
+    bool isGoodFile = true;
     HuffmanNode* root;
     map<string, uChar> stringTable;
 
     //read raw file to vector
     try {
-        inputSize = tools::readOriginFileToVector(fileName, rawData);
+        isGoodFile = tools::readOriginFileToVector(fileName, rawData);
     } catch (const exception& e) {
         cerr << e.what() << '\n';
         return false;
@@ -159,7 +158,7 @@ bool decompress(string fileName) {
     auto [originSize, compressBitsLength, codingTableSize, dataPeddingLength] = tools::readHeader(rawData);
     tools::readDecodeTable(rawData, stringTable, codingTableSize);
 
-    string bitStringData = tools::bitStream2String(rawData, dataPeddingLength);
+    string bitStringData = tools::convertToBitString(rawData, dataPeddingLength);
     rawData.clear();
     rawData.shrink_to_fit();
 
@@ -171,8 +170,5 @@ bool decompress(string fileName) {
     outFile.close();
 
     //check recover by outSize and originSize
-    if (decodedResult.length() == originSize)
-        return true;
-    else
-        return false;
+    return (decodedResult.length() == originSize) && isGoodFile;
 }
