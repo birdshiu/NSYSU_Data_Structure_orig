@@ -16,6 +16,8 @@ if you wnat to use this in debian environment, suggest you run setup.sh first!<b
 # How to use
 * python(GUI):
     * python3 p8.py
+* zenity(GUI):
+    * zenity/shellGUI.sh
 * elf:
     * ./huffman.elf ${file} -c
     * ./huffman.elf ${file} -d
