@@ -20,8 +20,8 @@ if you wnat to use this in debian environment, suggest you run setup.sh first!<b
     1. <pre><code>cd zenity/</code></pre>
     2. <pre><code>./shellGUI.sh</code></pre>
 * elf:
-    * <pre><code>./huffman.elf ${file} -c</code></pre>
-    * <pre><code>./huffman.elf ${file} -d</code></pre>
+    * compress: <pre><code>./huffman.elf ${file} -c</code></pre>
+    * decompress: <pre><code>./huffman.elf ${file} -d</code></pre>
 
 # Header format 
  * little endian
