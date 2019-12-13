@@ -1,7 +1,7 @@
 huffman coding
 ===
 This is a huffman encoding file application.
-You can use a.out or main.cpp singly. 
+You can use huffman.elf or main.cpp singly. 
 if you wnat to use this in debian environment, suggest you run setup.sh first!
 
 # How to build
