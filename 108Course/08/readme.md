@@ -6,9 +6,9 @@ if you wnat to use this in debian environment, suggest you run setup.sh first!<b
 
 # How to build
 * Compile cpp/hpp to elf:
-    * g++ -std=c++17 main.cpp tools.hpp huffmanLib.cpp huffmanLib.hpp -o huffman.elf
+    * g++ -std=c++17 main.cpp libs/tools.hpp libs/huffmanLib.cpp libs/huffmanLib.hpp -o huffman.elf
 * Compile to so file for dynamic linking in python:
-    * g++-9 -fPIC -rdynamic -shared -std=c++2a tools.hpp huffmanLib.cpp huffmanLib.hpp -o huffman.so
+    * g++-9 -fPIC -rdynamic -shared -std=c++2a libs/tools.hpp libs/huffmanLib.cpp libs/huffmanLib.hpp -o libs/huffman.so
     * ref: https://stackoverflow.com/questions/145270/calling-c-c-from-python
 * setup python environment
     * ./setup.sh

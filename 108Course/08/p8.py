@@ -5,9 +5,9 @@ from tkinter.filedialog import *
 from functools import partial
 import cppyy
 
-cppyy.include('./huffmanLib.hpp')
-cppyy.include('./tools.hpp')
-cppyy.load_library('huffman.so')
+cppyy.include('libs/huffmanLib.hpp')
+cppyy.include('libs/tools.hpp')
+cppyy.load_library('libs/huffman.so')
 
 
 def doDecode(fileName):
