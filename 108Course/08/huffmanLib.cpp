@@ -1,4 +1,3 @@
-#include "huffmanInCpp.hpp"
 #include <algorithm>
 #include <bitset>
 #include <cstring>

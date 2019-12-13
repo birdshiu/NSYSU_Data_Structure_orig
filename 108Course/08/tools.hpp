@@ -1,11 +1,12 @@
 #ifndef TOOLS
 #define TOOLS
+#include <algorithm>
+#include <cstring>
 #include <fstream>
 #include <iostream>
-#include <regex>
 #include <string>
 #include <vector>
-#include "huffmanInCpp.hpp"
+#include "huffmanLib.hpp"
 namespace tools {
 using namespace std;
 
@@ -38,7 +39,7 @@ void printAllCompressCode(vector<HuffmanNode*>& records) {
     cout << "mean length is: " << sumLength / records.size() << endl;
 }
 
-pair<uChar*, int> convertToByte(int _value) {
+pair<uChar*, int> convertToByte(size_t _value) {
     uChar* arr = new uChar[sizeof(_value)]();
     memcpy(arr, &_value, sizeof(_value));
     return make_pair(arr, sizeof(_value));

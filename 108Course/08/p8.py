@@ -5,7 +5,7 @@ from tkinter.filedialog import *
 from functools import partial
 import cppyy
 
-cppyy.include('./huffmanInCpp.hpp')
+cppyy.include('./huffmanLib.hpp')
 cppyy.include('./tools.hpp')
 cppyy.load_library('huffman.so')
 

@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "huffmanInCpp.hpp"
+#include "huffmanLib.hpp"
 #define uChar unsigned char
 
 using namespace std;
