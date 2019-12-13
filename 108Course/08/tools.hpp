@@ -89,6 +89,7 @@ int convertToINT(const vector<uChar>& _container) {
     // convert 4 bytes to INT
     int result = 0;
     memcpy(&result, &_container[0], sizeof(int));
+    cout << result << " ";
     return result;
 }
 
@@ -180,16 +181,10 @@ auto readHeader(vector<uChar>& rawData) {
     int originSize = 0, compressBitsLength = 0,
         codingTableSize = 0, datapaddingLength = 0;
 
-    originSize = convertToINT({rawData.at(0),
-                               rawData.at(1),
-                               rawData.at(2),
-                               rawData.at(3)});
-    stepForward(rawData, sizeof(int));
-    compressBitsLength = convertToINT({rawData.at(0),
-                                       rawData.at(1),
-                                       rawData.at(2),
-                                       rawData.at(3)});
-    stepForward(rawData, sizeof(int));
+    originSize = convertToINT(vector<uChar>(rawData.begin(), rawData.begin() + sizeof(size_t)));
+    stepForward(rawData, sizeof(size_t));
+    compressBitsLength = convertToINT(vector<uChar>(rawData.begin(), rawData.begin() + sizeof(size_t)));
+    stepForward(rawData, sizeof(size_t));
     stepForward(rawData, sizeof(float));  //remove compress rate
 
     codingTableSize = int(rawData.at(0));
@@ -220,7 +215,7 @@ void readDecodeTable(vector<uChar>& rawData, map<string, uChar>& decodeTable, in
         delete[] codingBuffer;
         stepForward(rawData, totalBytes + 2);
     }
-    //printReadDecodeTable(decodeTable);
+    printReadDecodeTable(decodeTable);
 }
 
 string bitStream2String(vector<uChar>& rawData, int paddingLength) {
