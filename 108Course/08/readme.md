@@ -25,7 +25,7 @@ if you wnat to use this in debian environment, suggest you run setup.sh first!<b
  * header format(2 part):<br>
     info:<br>
         <pre><code>|originSize(sizeof(size_t))|compressBitsLength (sizeof(size_t))|IEEE-754 for compressRate(4Byte)|<br>
-        |codingTable.size(1Byte)|padding.length(1Byte)|</code></pre><br>
+        |codingTable.size(1Byte)|padding.length(1Byte)|</code></pre>
     codingtable:<br>
         <pre><code>|uChar(1Byte)|codingLength(1Byte)|coding contents|</code></pre><br>
 
