@@ -3,25 +3,22 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    /*
-    [0] ./a.out
-    [1] input filename 
-    [2] compress | decompress
-    */
     bool result = false;
     if (argc == 2) {
-        if (argv[1] == "--help" || argv[1] == "-h") {
+        if (string(argv[1]) == string("--help") || string(argv[1]) == string("-h")) {
             cout << "[0] ./a.out" << endl
                  << "[1] input filename" << endl
-                 << "[2] compress |decompress" << endl
+                 << "[2] -c --compress\t to compress the input file" << endl
+                 << "    -d --decompress\t to decompress the input file" << endl
                  << "[3] output file name(default is append ~[2] option)" << endl;
+            return 0;
         } else {
             cout << "too less argument" << endl;
         }
     } else if (argc == 3) {
-        if (string(argv[2]) == string("compress")) {
+        if (string(argv[2]) == string("--compress") || string(argv[2]) == string("-c")) {
             result = compress(string(argv[1]));
-        } else if (string(argv[2]) == string("decompress")) {
+        } else if (string(argv[2]) == string("--decompress") || string(argv[2]) == string("-d")) {
             result = decompress(string(argv[1]));
         } else {
             cout << "Wrong option!" << endl;
@@ -31,9 +28,8 @@ int main(int argc, char *argv[]) {
     } else {
         cout << "too much arguments" << endl;
     }
-    if (result)
-        cout << "Success!" << endl;
-    else
-        cout << "Failed!" << endl;
+
+    cout << ((result) ? "Success!" : "Failed!") << endl;
+
     return 0;
 }

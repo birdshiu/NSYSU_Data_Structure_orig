@@ -176,9 +176,3 @@ bool decompress(string fileName) {
     else
         return false;
 }
-
-/*
-extern "C"{
-   HuffmanNode obj;
-   
-}*/

@@ -17,8 +17,8 @@ if you wnat to use this in debian environment, suggest you run setup.sh first!<b
 * python(GUI):
     * python3 p8.py
 * elf:
-    * ./huffman.elf ${file} compress
-    * ./huffman.elf ${file} decompress
+    * ./huffman.elf ${file} -c
+    * ./huffman.elf ${file} -d
 
 # Header format 
  * little endian
