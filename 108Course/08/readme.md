@@ -22,7 +22,7 @@ if you wnat to use this in debian environment, suggest you run setup.sh first!<b
 
 # Header format 
  * little endian
- * header format(2 part):
+ * header format(2 part):<br>
     info:<br>
         |originSize(sizeof(size_t))|compressBitsLength (sizeof(size_t))|IEEE-754 for compressRate(4Byte)|<br>
         |codingTable.size(1Byte)|padding.length(1Byte)|<br>
@@ -30,4 +30,4 @@ if you wnat to use this in debian environment, suggest you run setup.sh first!<b
         |uChar(1Byte)|codingLength(1Byte)|coding contents|<br>
 
 ==Warning==<br>
-input file(to compress) MAX size is 512.0 MB<br>
+input file(to compress) MAX size is 2^31 GB<br>
