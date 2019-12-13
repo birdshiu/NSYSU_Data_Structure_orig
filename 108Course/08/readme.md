@@ -17,10 +17,11 @@ if you wnat to use this in debian environment, suggest you run setup.sh first!<b
 * python(GUI):
     * python3 p8.py
 * zenity(GUI):
-    * zenity/shellGUI.sh
+    1. <pre><code>cd zenity/</code></pre>
+    2. <pre><code>./shellGUI.sh</code></pre>
 * elf:
-    * ./huffman.elf ${file} -c
-    * ./huffman.elf ${file} -d
+    * <pre><code>./huffman.elf ${file} -c</code></pre>
+    * <pre><code>./huffman.elf ${file} -d</code></pre>
 
 # Header format 
  * little endian
