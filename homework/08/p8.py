@@ -1,9 +1,10 @@
+#!/bin/python3
 import tkinter as tk
 import tkinter.messagebox
 import tkinter.ttk
-from tkinter.filedialog import *
+from tkinter.filedialog import askopenfilename
 from functools import partial
-import cppyy
+import cppyy, sys
 
 cppyy.include('libs/huffmanLib.hpp')
 cppyy.include('libs/tools.hpp')
@@ -48,10 +49,10 @@ while(True):
         break
 
 
-doDecodeButton = tk.Button(window, text='decode',
-                           width=10, height=2, command=partial(doDecode, fileName)).pack()
-doEncodeButton = tk.Button(window, text='encode',
-                           width=10, height=2, command=partial(doEncode, fileName)).pack()
+tk.Button(window, text='decode', width=10, height=2,
+          command=partial(doDecode, fileName)).pack()
+tk.Button(window, text='encode', width=10, height=2,
+          command=partial(doEncode, fileName)).pack()
 
 
 # loop while you ckick
