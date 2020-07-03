@@ -35,12 +35,12 @@ You can use huffman.elf or main.cpp singly. <br>
         <pre><code>|uChar(1Byte)|codingLength(1Byte)|coding contents|</code></pre><br>
 
 ==Warning==<br>
-input file(to compress) MAX size is 2^31 GB<br>
+Input file(to compress) MAX size is 2^31 GB, MIN is 1 Byte<br>
+You cannot compress nothing by huffman coding algorithm<br>
 
 # Might do
 1. more clear and efficient while compress
-    * assign code have to traversal once
-    * record leafs also traversal once
-    * after recording leafs push all leafs in to map?
+    * Assigning code have to traversal once, recording leafs are also traversal once.
+    * After recording leafs push all leafs in to map?
     * **why don't I just push code into map once**
         * Will this be "not clean code"?
