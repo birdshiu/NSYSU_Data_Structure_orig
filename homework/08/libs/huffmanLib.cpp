@@ -26,6 +26,17 @@ HuffmanNode::HuffmanNode(HuffmanNode *leftNode, HuffmanNode *rightNode)
     byteCode = ((int(left->byteCode) + int(right->byteCode)) / 2) % (1 << 8);
 }
 
+static bool getFile(string fileName, vector<uChar> &rawData)
+{
+    bool isGood = false;
+    try {
+        isGood = tools::openToVector(fileName, rawData);
+    } catch (const exception &e) {
+        cerr << e.what() << '\n';
+    }
+    return isGood;
+}
+
 static HuffmanNode *mergeHuffmanTree(map<uChar, int> &nodeTable)
 {
     priority_queue<HuffmanNode *, vector<HuffmanNode *>, tools::cmpNodes> pq;
@@ -126,17 +137,6 @@ static void writeCompressResult(string inputFileName,
         outFile << i;
 
     outFile.close();
-}
-
-static bool getFile(string fileName, vector<uChar> &rawData)
-{
-    bool isGood = false;
-    try {
-        isGood = tools::openToVector(fileName, rawData);
-    } catch (const exception &e) {
-        cerr << e.what() << '\n';
-    }
-    return isGood;
 }
 
 bool compress(string fileName)

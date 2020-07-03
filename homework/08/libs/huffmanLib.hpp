@@ -19,8 +19,17 @@ public:
     HuffmanNode *parent, *left, *right;
 };
 static HuffmanNode *mergeHuffmanTree(map<uChar, int> &nodeTable);
+
+/*
+ * You can conbine `assignCompressCode()` and `recordingLeafs()` together.
+ * Both they traverse inorderly.
+ * 
+ * But in my opinion, "one-function-do-one-thing" has higher privilege to
+ * implement
+ */
 static void assignCompressCode(HuffmanNode *current, string code);
 static void recordingLeafs(HuffmanNode *current, vector<HuffmanNode *> &leafs);
+
 static void encoding(vector<HuffmanNode *> &leafs,
                      vector<uChar> &rawData,
                      vector<bool> &encodedData);
