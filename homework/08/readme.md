@@ -1,17 +1,19 @@
-huffman coding
+Huffman coding application
 ===
 This is a huffman encoding file application.<br>
 You can use huffman.elf or main.cpp singly. <br>
-if you wnat to use this in debian environment, suggest you run setup.sh first!<br>
 
 # How to build
-* Compile cpp/hpp to elf:
-    * g++ -std=c++17 main.cpp libs/tools.hpp libs/huffmanLib.cpp libs/huffmanLib.hpp -o huffman.elf
-* Compile to so file for dynamic linking in python:
-    * g++-9 -fPIC -rdynamic -shared -std=c++2a libs/tools.hpp libs/huffmanLib.cpp libs/huffmanLib.hpp -o libs/huffman.so
+* Command Line Interface:
+    * make
+* Graphical User Interface:
+    * ./setup.sh
+    * make dep
     * ref: https://stackoverflow.com/questions/145270/calling-c-c-from-python
 * setup python environment
     * ./setup.sh
+* clean
+    * make clean
 
 # How to use
 * python(GUI):
@@ -19,9 +21,9 @@ if you wnat to use this in debian environment, suggest you run setup.sh first!<b
 * zenity(GUI):
     1. <pre><code>cd zenity/</code></pre>
     2. <pre><code>./shellGUI.sh</code></pre>
-* elf:
-    * compress: <pre><code>./huffman.elf ${file} -c</code></pre>
-    * decompress: <pre><code>./huffman.elf ${file} -d</code></pre>
+* CLI:
+    * compress: <pre><code>./huffman.elf -c ${file}</code></pre>
+    * decompress: <pre><code>./huffman.elf -d ${file}</code></pre>
 
 # Header format 
  * little endian
