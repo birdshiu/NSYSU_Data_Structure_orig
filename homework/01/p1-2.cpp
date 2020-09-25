@@ -7,12 +7,12 @@ void carryFunction(vector<int> &current) {
   for (vector<int>::iterator iter = current.begin(); iter != current.end();
        iter++) {
     (*iter) += carryValue;
-    carryValue = (*iter) / 100000;
-    (*iter) %= 100000;
+    carryValue = (*iter) / 10;
+    (*iter) %= 10;
   }
   while (carryValue) { // the last value to carry
-    current.push_back(carryValue % 100000);
-    carryValue /= 100000;
+    current.push_back(carryValue % 10);
+    carryValue /= 10;
   }
 }
 
